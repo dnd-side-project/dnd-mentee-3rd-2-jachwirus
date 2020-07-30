@@ -1,10 +1,10 @@
 #!/bin/sh
-set -e
 
-branch=$(git rev-parse --abbrev-ref HEAD)
+protected_branch='master'
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-if [ "$branch" = "master" ]
+if [ "$protected_branch" = "$current_branch" ]
 then
-  echo ERROR: Do NOT commit on master branch
+  echo FATAL: DO NOT COMMIT ON master BRANCH
   exit 1
 fi
