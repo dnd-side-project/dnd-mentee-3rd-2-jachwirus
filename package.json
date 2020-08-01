@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
+    "husky": "^4.2.5"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "./script/do-not-commit-on-master.sh",
+      "pre-push" : "./script/do-not-push-into-master.sh"
+    }
+  }
+}
