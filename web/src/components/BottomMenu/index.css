@@ -1,0 +1,13 @@
+.MenuContainer {
+    display: flex;
+}
+
+.Menu {
+    flex-grow: 1;
+    font-size: calc(10px + 2vmin);
+    padding-top: 4px;
+}
+
+.Image {
+    max-height: calc(15px + 2vmin);
+}
