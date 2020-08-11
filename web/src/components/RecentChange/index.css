@@ -1,0 +1,7 @@
+.RecentChange {
+    width: calc(200px + 2vmin);
+}
+
+.Text {
+    text-align: left;
+}
