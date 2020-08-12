@@ -3,4 +3,8 @@ package com.jachwirus.documentreadapi.repository;
 import com.jachwirus.documentreadapi.dto.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DocumentRepository extends JpaRepository<Document, Long> { }
+import java.util.List;
+
+public interface DocumentRepository extends JpaRepository<Document, Long> {
+    List<Document> findByCategory(String category);
+}

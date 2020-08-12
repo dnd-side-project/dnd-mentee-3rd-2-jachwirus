@@ -5,6 +5,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
 public interface DocumentService {
-    CollectionModel<EntityModel<Document>> findAllDocuments();
+    CollectionModel<EntityModel<Document>> findDocumentsList(String category);
     EntityModel<Document> findDocumentById(Long id);
 }

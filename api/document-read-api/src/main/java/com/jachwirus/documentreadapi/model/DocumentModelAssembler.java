@@ -1,5 +1,6 @@
 package com.jachwirus.documentreadapi.model;
 
+import static com.jachwirus.documentreadapi.controller.DocumentController.ENTIRE_LIST;
 import com.jachwirus.documentreadapi.controller.DocumentController;
 import com.jachwirus.documentreadapi.dto.Document;
 import org.springframework.hateoas.EntityModel;
@@ -14,8 +15,9 @@ public class DocumentModelAssembler implements RepresentationModelAssembler<Docu
     @Override
     public EntityModel<Document> toModel(Document document) {
         EntityModel<Document> model = EntityModel.of(document,
-                linkTo(methodOn(DocumentController.class).one(document.getId())).withSelfRel(),
-                linkTo(methodOn(DocumentController.class).all()).withRel("documents")
+                linkTo(methodOn(DocumentController.class).findOne(document.getId())).withSelfRel(),
+                linkTo(methodOn(DocumentController.class).findList(document.getCategory())).withRel("category"),
+                linkTo(methodOn(DocumentController.class).findList(ENTIRE_LIST)).withRel("documents")
                 );
         return model;
     }
