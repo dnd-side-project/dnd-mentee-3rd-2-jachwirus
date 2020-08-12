@@ -10,7 +10,7 @@ spring:
   profiles: dev
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
   datasource:
     url: jdbc:mysql://localhost:3306/jachwirus
     username: root
