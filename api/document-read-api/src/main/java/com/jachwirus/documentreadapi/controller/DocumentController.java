@@ -2,7 +2,6 @@ package com.jachwirus.documentreadapi.controller;
 
 import com.jachwirus.documentreadapi.dto.Document;
 import com.jachwirus.documentreadapi.service.DocumentService;
-import com.jachwirus.documentreadapi.service.DocumentServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -14,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class DocumentController {
     public static final String ENTIRE_LIST = "ENTIRE";
 
-    private DocumentService documentService;
-    public DocumentController(DocumentServiceImpl documentServiceImpl){
-        this.documentService = documentServiceImpl;
+    private final DocumentService documentService;
+    public DocumentController(DocumentService documentService){
+        this.documentService = documentService;
     }
 
     @GetMapping("")
