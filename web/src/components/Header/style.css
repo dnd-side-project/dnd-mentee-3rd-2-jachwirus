@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+
+.App-title {
+  text-align: left;
+  background-color: #ffffff;
+  font-family: "Jua", sans-serif;
+  font-size: x-large;
+}
+
+.Title-text {
+  color: black;
+  text-decoration: none;
+  margin-left: 10px;
+}
