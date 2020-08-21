@@ -12,7 +12,7 @@ public class DocumentDtoMapper {
         List<DocumentVersion> versions = document.getVersions();
         DocumentVersion lastVersion = versions.get(versions.size() - 1);
         List<String> hashTags = new ArrayList<>();
-        int numberOfComments = 0;
+        int numberOfComments = document.getComments().size();
 
         return new DocumentDto()
                 .setId(document.getId())

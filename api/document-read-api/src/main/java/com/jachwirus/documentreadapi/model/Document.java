@@ -25,9 +25,9 @@ public class Document {
     @OneToMany(mappedBy = "document")
     private List<DocumentVersion> versions = new ArrayList<>();
 
-//    @OneToMany
-//    private List<Comment> comments;
-//    @OneToMany
+    @OneToMany(mappedBy = "document")
+    private List<Comment> comments = new ArrayList<>();
+//    @ManyToMany
 //    private List<HashTag> tags;
 
     public void addNewVersion(DocumentVersion version){
