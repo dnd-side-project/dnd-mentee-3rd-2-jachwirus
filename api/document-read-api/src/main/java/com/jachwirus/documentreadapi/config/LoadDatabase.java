@@ -1,9 +1,13 @@
 package com.jachwirus.documentreadapi.config;
 
 import com.jachwirus.documentreadapi.model.Document;
+import com.jachwirus.documentreadapi.model.DocumentHashTag;
 import com.jachwirus.documentreadapi.model.DocumentVersion;
+import com.jachwirus.documentreadapi.model.HashTag;
+import com.jachwirus.documentreadapi.repository.DocumentHashTagRepository;
 import com.jachwirus.documentreadapi.repository.DocumentRepository;
 import com.jachwirus.documentreadapi.repository.DocumentVersionRepository;
+import com.jachwirus.documentreadapi.repository.HashTagRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -25,13 +29,20 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(
             DocumentRepository documentRepository,
-            DocumentVersionRepository documentVersionRepository
+            DocumentVersionRepository documentVersionRepository,
+            DocumentHashTagRepository documentHashTagRepository,
+            HashTagRepository hashTagRepository
     ) {
         final String env = environment.getActiveProfiles()[0];
         switch (env){
             case "dev":
                 return args -> {
-                    loadMockData(documentRepository, documentVersionRepository);
+                    loadMockData(
+                            documentRepository,
+                            documentVersionRepository,
+                            documentHashTagRepository,
+                            hashTagRepository
+                    );
                 };
             default:
                 return args -> {};
@@ -40,7 +51,9 @@ public class LoadDatabase {
 
     private void loadMockData(
             DocumentRepository documentRepository,
-            DocumentVersionRepository documentVersionRepository
+            DocumentVersionRepository documentVersionRepository,
+            DocumentHashTagRepository documentHashTagRepository,
+            HashTagRepository hashTagRepository
     ){
         String title, category;
         int like, dislike, view_count;
@@ -68,16 +81,16 @@ public class LoadDatabase {
         createdAt = new Date();
         diff = null;
 
-        DocumentVersion version = new DocumentVersion()
-                .setContributorId(contributorId)
-                .setDataUrl(dataUrl)
-                .setThumbnailUrl(thumbnailUrl)
-                .setFlag(flag)
-                .setCreatedAt(createdAt)
-                .setDiff(diff);
-
-        document.addNewVersion(version);
-        documentVersionRepository.save(version);
+        addNewVersion(
+                contributorId,
+                dataUrl,
+                thumbnailUrl,
+                flag,
+                createdAt,
+                diff,
+                document,
+                documentVersionRepository
+        );
 
         contributorId = 2;
         dataUrl="tmp2.com"; ;
@@ -86,18 +99,68 @@ public class LoadDatabase {
         createdAt = new Date();
         diff = null;
 
-        DocumentVersion version2 = new DocumentVersion()
+        addNewVersion(
+                contributorId,
+                dataUrl,
+                thumbnailUrl,
+                flag,
+                createdAt,
+                diff,
+                document,
+                documentVersionRepository
+        );
+
+        String tagName = "hello";
+        addHashTag(tagName, document, documentHashTagRepository, hashTagRepository);
+
+        String tagName2 = "world";
+        addHashTag(tagName2, document, documentHashTagRepository, hashTagRepository);
+
+        documentRepository.findAll().forEach(doc -> log.info("Preloaded" + doc));
+    }
+
+    private void addNewVersion(
+            long contributorId,
+            String dataUrl,
+            String thumbnailUrl,
+            int flag,
+            Date createdAt,
+            String diff,
+            Document document,
+            DocumentVersionRepository documentVersionRepository
+    ) {
+        DocumentVersion version = new DocumentVersion()
                 .setContributorId(contributorId)
                 .setDataUrl(dataUrl)
                 .setThumbnailUrl(thumbnailUrl)
                 .setFlag(flag)
                 .setCreatedAt(createdAt)
                 .setDiff(diff);
+        document.addNewVersion(version);
+        documentVersionRepository.save(version);
+    }
 
-        document.addNewVersion(version2);
-        documentVersionRepository.save(version2);
+    private void addHashTag(
+            String tagName,
+            Document document,
+            DocumentHashTagRepository documentHashTagRepository,
+            HashTagRepository hashTagRepository
+    ) {
+        HashTag tag = new HashTag().setTagName(tagName);
+        DocumentHashTag mapping = new DocumentHashTag();
 
-        documentRepository.findAll().forEach(doc -> log.info("Preloaded" + doc));
+        document.addHashTag(mapping, tag);
+        hashTagRepository.save(tag);
+        documentHashTagRepository.save(mapping);
     }
 
 }
+//Caused by: org.hibernate.LazyInitializationException:
+// failed to lazily initialize a collection of role:
+// com.jachwirus.documentreadapi.model.Document.comments, could not initialize proxy
+// - no Session
+//	at org.hibernate.collection.internal.AbstractPersistentCollection.throwLazyInitializationException(AbstractPersistentCollection.java:606) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
+//	at org.hibernate.collection.internal.AbstractPersistentCollection.withTemporarySessionIfNeeded(AbstractPersistentCollection.java:218) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
+//	at org.hibernate.collection.internal.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:585) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
+//	at org.hibernate.collection.internal.AbstractPersistentCollection.read(AbstractPersistentCollection.java:149) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
+//	at org.hibernate.collection.internal.PersistentBag.toString(PersistentBag.java:621) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]

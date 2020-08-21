@@ -9,7 +9,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = "versions")
+@ToString(exclude = {"versions", "comments", "tags"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @Accessors(chain=true)
@@ -24,14 +24,20 @@ public class Document {
 
     @OneToMany(mappedBy = "document")
     private List<DocumentVersion> versions = new ArrayList<>();
-
     @OneToMany(mappedBy = "document")
     private List<Comment> comments = new ArrayList<>();
-//    @ManyToMany
-//    private List<HashTag> tags;
+    @OneToMany(mappedBy = "document")
+    private List<DocumentHashTag> tags = new ArrayList<>();
 
     public void addNewVersion(DocumentVersion version){
         version.setDocument(this);
         this.versions.add(version);
+    }
+
+    public void addHashTag(DocumentHashTag mapping, HashTag tag) {
+        mapping.setDocument(this);
+        mapping.setHashTag(tag);
+        this.tags.add(mapping);
+        tag.getDocuments().add(mapping);
     }
 }
