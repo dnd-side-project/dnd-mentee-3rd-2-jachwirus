@@ -7,4 +7,5 @@ import org.springframework.hateoas.EntityModel;
 public interface DocumentService {
     CollectionModel<EntityModel<DocumentDto>> findDocumentsList(String category);
     EntityModel<DocumentDto> findDocumentById(Long id);
+    CollectionModel<EntityModel<DocumentDto>> getHotChartDocumentList();
 }

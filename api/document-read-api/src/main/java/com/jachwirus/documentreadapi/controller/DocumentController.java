@@ -35,4 +35,11 @@ public class DocumentController {
         EntityModel<DocumentDto> model = documentService.findDocumentById(id);
         return model;
     }
+
+    @GetMapping("/hot-chart")
+    @ApiOperation(value = "인기 게시물 조회")
+    public CollectionModel<EntityModel<DocumentDto>> getHotDocument(){
+        CollectionModel<EntityModel<DocumentDto>> collection = documentService.getHotChartDocumentList();
+        return collection;
+    }
 }
