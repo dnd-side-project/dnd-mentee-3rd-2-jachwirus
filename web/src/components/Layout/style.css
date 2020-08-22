@@ -1,23 +1,37 @@
 .Layout {
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
 }
 
 .App-header {
+  position: fixed;
+  width: 100%;
+  height: fit-content;
+  top: 0;
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
+  /* min-height: 100vh; 
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   font-size: calc(10px + 2vmin);
   color: white;
 }
 .App-page {
-  flex-grow: 1;
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
 }
+::-webkit-scrollbar {
+  display: none;
+}
+
 .App-menu {
   position: fixed;
+  bottom: 0;
 }

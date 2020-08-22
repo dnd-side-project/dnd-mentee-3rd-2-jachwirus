@@ -1,5 +1,17 @@
+.homeImage {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
 .HomePage {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.Line {
+  width: 100%;
+  height: 1;
+  border: 0.1px solid lightgray;
 }

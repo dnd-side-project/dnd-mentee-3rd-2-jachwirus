@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import "./style.css";
 
 class Header extends Component {
@@ -6,16 +8,9 @@ class Header extends Component {
     return (
       <header>
         <h1 className="App-title">
-          <a
-            href="/"
-            onClick={function (e) {
-              e.preventDefault();
-              this.props.onChangePage();
-            }.bind(this)}
-            className="Title-text"
-          >
+          <Link to="/" className="Title-text">
             {this.props.title}
-          </a>
+          </Link>
         </h1>
       </header>
     );

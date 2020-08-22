@@ -1,0 +1,8 @@
+.image {
+  max-height: calc(15px + 2vmin);
+  flex-grow: 1;
+}
+
+.text {
+  font-size: small;
+}

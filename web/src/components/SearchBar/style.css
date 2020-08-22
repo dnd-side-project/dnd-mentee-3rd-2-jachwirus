@@ -1,0 +1,22 @@
+.Container {
+  height: calc(27px + 2vmin);
+  display: flex;
+  border: 1.5px solid blueviolet;
+  border-radius: 20px;
+}
+
+.Search {
+  flex-grow: 1;
+  height: calc(25px + 2vmin);
+  text-align: center;
+  font-size: calc(10px + 2vmin);
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
+
+.SearchButton {
+  max-height: calc(20px + 2vmin);
+  padding: 5px;
+  outline: none;
+}

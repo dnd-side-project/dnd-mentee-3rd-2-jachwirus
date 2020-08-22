@@ -1,9 +1,0 @@
-.Search {
-    width: 60%;
-    height: calc(15px + 2vmin);
-}
-
-.SearchButton {
-    max-height: calc(15px + 2vmin);
-    margin-left: 5px;
-}

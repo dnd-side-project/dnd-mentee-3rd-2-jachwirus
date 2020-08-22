@@ -1,0 +1,8 @@
+.HashTag {
+  width: fit-content;
+  font-size: small;
+  padding: 3px 15px;
+  margin-right: 10px;
+  border: 1px solid blueviolet;
+  border-radius: 20px;
+}
