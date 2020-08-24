@@ -1,25 +1,18 @@
 package com.jachwirus.documentreadapi.dto.mapper;
 
-import com.jachwirus.documentreadapi.dto.model.DocumentDto;
+import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
 import com.jachwirus.documentreadapi.model.Document;
-import com.jachwirus.documentreadapi.model.DocumentHashTag;
 import com.jachwirus.documentreadapi.model.DocumentVersion;
-import com.jachwirus.documentreadapi.model.HashTag;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class DocumentDtoMapper {
-    public static DocumentDto toDocumentDto(Document document) {
-        List<DocumentVersion> versions = document.getVersions();
-        DocumentVersion lastVersion = versions.get(versions.size() - 1);
-        List<String> hashTags = document.getTags().stream()
-                .map(DocumentHashTag::getHashTag)
-                .map(HashTag::getTagName)
-                .collect(Collectors.toList());
+public class DocumentInfoDtoMapper {
+    public static DocumentInfoDto toDocumentInfoDto(Document document) {
+        DocumentVersion lastVersion = Util.getLatestVersion(document);
+        List<String> hashTags = Util.getHashTags(document.getTags());
         int numberOfComments = document.getComments().size();
 
-        return new DocumentDto()
+        return new DocumentInfoDto()
                 .setId(document.getId())
                 .setTitle(document.getTitle())
                 .setThumbnailURL(lastVersion.getThumbnailUrl())

@@ -1,6 +1,7 @@
 package com.jachwirus.documentreadapi.controller;
 
-import com.jachwirus.documentreadapi.dto.model.DocumentDto;
+import com.jachwirus.documentreadapi.dto.model.DocumentDetailDto;
+import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
 import com.jachwirus.documentreadapi.service.DocumentService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.CollectionModel;
@@ -20,26 +21,32 @@ public class DocumentController {
 
     @GetMapping("")
     @ApiOperation(value = "위키 데이터 리스트 조회")
-    public CollectionModel<EntityModel<DocumentDto>> findList(
+    public CollectionModel<EntityModel<DocumentInfoDto>> findList(
             @RequestParam(defaultValue = ENTIRE_LIST, value = "category", name="category", required = false)
             String category
     ){
-        CollectionModel<EntityModel<DocumentDto>> collection = documentService.findDocumentsList(category);
+        CollectionModel<EntityModel<DocumentInfoDto>> collection = documentService.findDocumentsList(category);
         return collection;
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "위키 문서 상세 조회")
-    public EntityModel<DocumentDto> findOne(@PathVariable Long id){
+    public EntityModel<DocumentDetailDto> findOne(@PathVariable Long id){
         //need to be changed
-        EntityModel<DocumentDto> model = documentService.findDocumentById(id);
+        EntityModel<DocumentDetailDto> model = documentService.findDocumentById(id);
         return model;
     }
 
     @GetMapping("/hot-chart")
     @ApiOperation(value = "인기 게시물 조회")
-    public CollectionModel<EntityModel<DocumentDto>> getHotDocument(){
-        CollectionModel<EntityModel<DocumentDto>> collection = documentService.getHotChartDocumentList();
+    public CollectionModel<EntityModel<DocumentInfoDto>> getHotDocument(){
+        CollectionModel<EntityModel<DocumentInfoDto>> collection = documentService.getHotChartDocumentList();
         return collection;
+    }
+
+    @GetMapping("/recent")
+    @ApiOperation(value = "최신 업데이트 게시물 조회")
+    public CollectionModel<EntityModel<DocumentInfoDto>> getRecentDocumentList() {
+        return null;
     }
 }

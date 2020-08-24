@@ -1,11 +1,12 @@
 package com.jachwirus.documentreadapi.service;
 
-import com.jachwirus.documentreadapi.dto.model.DocumentDto;
+import com.jachwirus.documentreadapi.dto.model.DocumentDetailDto;
+import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
 public interface DocumentService {
-    CollectionModel<EntityModel<DocumentDto>> findDocumentsList(String category);
-    EntityModel<DocumentDto> findDocumentById(Long id);
-    CollectionModel<EntityModel<DocumentDto>> getHotChartDocumentList();
+    CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category);
+    EntityModel<DocumentDetailDto> findDocumentById(Long id);
+    CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList();
 }

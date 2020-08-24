@@ -1,6 +1,10 @@
 package com.jachwirus.documentreadapi.dto.model;
 
-import lombok.*;
+import com.jachwirus.documentreadapi.model.Comment;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.List;
@@ -10,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Accessors(chain=true)
-public class DocumentDto {
+public class DocumentDetailDto {
     private Long id;
     private String title;
-    private String thumbnailURL;
     private String dataURL;
     private int likes;
     private int dislikes;
     private int viewCount;
     private String category;
     private List<String> hashTags;
-    private int numberOfComments;
+    private List<Comment> comments;
+    private int flag;
 }
