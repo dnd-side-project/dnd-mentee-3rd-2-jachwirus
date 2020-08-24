@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,6 +107,14 @@ public class DocumentServiceImpl implements DocumentService {
                 .collect(Collectors.toList());
         Collections.sort(list, Comparator.comparingInt(Document::getViewCount)); // need to modify sort in query
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, "/hot-chart");
+        return collectionModel;
+    }
+
+    @Override
+    public CollectionModel<EntityModel<DocumentInfoDto>> getRecentChartDocumentList() {
+        List<Document> list = documentRepository.findAll();
+        Collections.sort(list, Comparator.comparingLong(Document::getId).reversed());//need to do at query
+        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, "/recent");
         return collectionModel;
     }
 }

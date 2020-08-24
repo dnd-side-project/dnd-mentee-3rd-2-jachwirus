@@ -130,7 +130,6 @@ public class LoadDatabase {
             DocumentVersionRepository documentVersionRepository
     ) {
         DocumentVersion version = new DocumentVersion()
-                .setContributorId(contributorId)
                 .setDataUrl(dataUrl)
                 .setThumbnailUrl(thumbnailUrl)
                 .setFlag(flag)

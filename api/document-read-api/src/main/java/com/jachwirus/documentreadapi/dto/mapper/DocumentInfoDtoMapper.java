@@ -22,6 +22,7 @@ public class DocumentInfoDtoMapper {
                 .setViewCount(document.getViewCount())
                 .setCategory(document.getCategory())
                 .setHashTags(hashTags)
-                .setNumberOfComments(numberOfComments);
+                .setNumberOfComments(numberOfComments)
+                .setLastModified(lastVersion.getCreatedAt());
     }
 }

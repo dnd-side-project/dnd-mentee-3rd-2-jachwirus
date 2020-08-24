@@ -9,4 +9,5 @@ public interface DocumentService {
     CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category);
     EntityModel<DocumentDetailDto> findDocumentById(Long id);
     CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList();
+    CollectionModel<EntityModel<DocumentInfoDto>> getRecentChartDocumentList();
 }

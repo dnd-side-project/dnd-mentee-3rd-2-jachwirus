@@ -3,6 +3,7 @@ package com.jachwirus.documentreadapi.dto.model;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -21,4 +22,5 @@ public class DocumentInfoDto {
     private String category;
     private List<String> hashTags;
     private int numberOfComments;
+    private Date lastModified;
 }

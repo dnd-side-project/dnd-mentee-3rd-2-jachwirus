@@ -25,7 +25,8 @@ public class DocumentController {
             @RequestParam(defaultValue = ENTIRE_LIST, value = "category", name="category", required = false)
             String category
     ){
-        CollectionModel<EntityModel<DocumentInfoDto>> collection = documentService.findDocumentsList(category);
+        CollectionModel<EntityModel<DocumentInfoDto>> collection
+                = documentService.findDocumentsList(category);
         return collection;
     }
 
@@ -40,13 +41,16 @@ public class DocumentController {
     @GetMapping("/hot-chart")
     @ApiOperation(value = "인기 게시물 조회")
     public CollectionModel<EntityModel<DocumentInfoDto>> getHotDocument(){
-        CollectionModel<EntityModel<DocumentInfoDto>> collection = documentService.getHotChartDocumentList();
+        CollectionModel<EntityModel<DocumentInfoDto>> collection
+                = documentService.getHotChartDocumentList();
         return collection;
     }
 
     @GetMapping("/recent")
     @ApiOperation(value = "최신 업데이트 게시물 조회")
     public CollectionModel<EntityModel<DocumentInfoDto>> getRecentDocumentList() {
-        return null;
+        CollectionModel<EntityModel<DocumentInfoDto>> collection
+                = documentService.getRecentChartDocumentList();
+        return collection;
     }
 }

@@ -14,15 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Accessors(chain=true)
-public class DocumentDetailDto {
-    private Long id;
-    private String title;
-    private String dataURL;
-    private int likes;
-    private int dislikes;
-    private int viewCount;
-    private String category;
-    private List<String> hashTags;
+public class DocumentDetailDto extends DocumentInfoDto{
     private List<Comment> comments;
     private int flag;
 }
