@@ -19,7 +19,9 @@ public class DocumentVersion {
     @ManyToOne
     @JoinColumn(name = "document_id")
     private Document document;
-    private Long contributorId;
+    @ManyToOne
+    @JoinColumn(name = "contributor_id")
+    private User contributor;
     private String dataUrl;
     private String thumbnailUrl;
     private int flag;//unique
