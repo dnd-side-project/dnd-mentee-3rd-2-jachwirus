@@ -1,5 +1,4 @@
 import React from "react";
-import findImage from "../../images/magnifying-glass.png";
 import "./style.css";
 
 function SearchBar() {
@@ -21,7 +20,7 @@ function SearchBar() {
       <input
         className="SearchButton"
         type="image"
-        src={findImage}
+        src="/images/magnifying-glass.png"
         alt="submit"
       ></input>
       <input
