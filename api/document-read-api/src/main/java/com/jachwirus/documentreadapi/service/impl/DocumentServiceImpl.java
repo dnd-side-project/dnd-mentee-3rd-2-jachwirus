@@ -56,7 +56,10 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category) {
-        if(category == null || category.equals("") || category.equals(ENTIRE_LIST)){
+        boolean isCategoryEmpty = category == null || category.equals("");
+        boolean isCategoryEntire = isCategoryEmpty || category.equals(ENTIRE_LIST);
+
+        if(isCategoryEntire){
             return findAllDocument();
         }else{
             return findByCategory(category);
