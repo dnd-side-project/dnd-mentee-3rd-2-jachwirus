@@ -15,10 +15,12 @@ import javax.persistence.*;
 public class DocumentHashTag {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")
     private Document document;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private HashTag hashTag;
 }

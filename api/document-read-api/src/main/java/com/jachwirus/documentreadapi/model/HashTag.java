@@ -17,6 +17,7 @@ import java.util.List;
 public class HashTag {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     @OneToMany(mappedBy = "hashTag")
     private List<DocumentHashTag> documents = new ArrayList<>();
     private String tagName;

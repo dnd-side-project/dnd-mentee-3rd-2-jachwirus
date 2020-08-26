@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class HotChart {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     @JoinColumn(name = "document_id")
     private Document document;

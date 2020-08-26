@@ -6,7 +6,7 @@ import com.jachwirus.documentreadapi.model.DocumentVersion;
 
 public class DocumentDetailDtoMapper {
     public static DocumentDetailDto toDocumentDetailDto(Document document) {
-        DocumentVersion lastVersion = Util.getLatestVersion(document);
+        DocumentVersion lastVersion = document.getLatestVersion();
 
         DocumentDetailDto dto = (
                 (DocumentDetailDto)DocumentInfoDtoMapper.toDocumentInfoDto(document)

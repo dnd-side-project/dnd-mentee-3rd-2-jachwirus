@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DocumentInfoDtoMapper {
     public static DocumentInfoDto toDocumentInfoDto(Document document) {
-        DocumentVersion lastVersion = Util.getLatestVersion(document);
+        DocumentVersion lastVersion = document.getLatestVersion();
         List<String> hashTags = Util.getHashTags(document.getTags());
         int numberOfComments = document.getComments().size();
 

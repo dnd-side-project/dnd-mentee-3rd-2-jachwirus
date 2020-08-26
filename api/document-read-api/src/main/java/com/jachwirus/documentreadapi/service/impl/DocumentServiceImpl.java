@@ -11,6 +11,8 @@ import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
 import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.exception.DocumentNotFoundException;
 import com.jachwirus.documentreadapi.dto.assembler.DocumentInfoAssembler;
+import com.jachwirus.documentreadapi.model.DocumentHashTag;
+import com.jachwirus.documentreadapi.repository.DocumentHashTagRepository;
 import com.jachwirus.documentreadapi.repository.DocumentRepository;
 
 import com.jachwirus.documentreadapi.repository.HotChartRepository;
@@ -32,20 +34,24 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class DocumentServiceImpl implements DocumentService {
     private DocumentRepository documentRepository;
+    private DocumentHashTagRepository documentHashTagRepository;
+    private HotChartRepository hotChartRepository;
     private DocumentInfoAssembler documentInfoAssembler;
     private DocumentDetailAssembler documentDetailAssembler;
-    private HotChartRepository hotChartRepository;
+
 
     public DocumentServiceImpl(
             DocumentRepository documentRepository,
+            DocumentHashTagRepository documentHashTagRepository,
+            HotChartRepository hotChartRepository,
             DocumentInfoAssembler documentInfoAssembler,
-            DocumentDetailAssembler documentDetailAssembler,
-            HotChartRepository hotChartRepository
+            DocumentDetailAssembler documentDetailAssembler
     ){
         this.documentRepository = documentRepository;
+        this.documentHashTagRepository = documentHashTagRepository;
+        this.hotChartRepository = hotChartRepository;
         this.documentInfoAssembler = documentInfoAssembler;
         this.documentDetailAssembler = documentDetailAssembler;
-        this.hotChartRepository = hotChartRepository;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private CollectionModel<EntityModel<DocumentInfoDto>> findAllDocument(){
-        List<Document> documentList= documentRepository.findAll();
+        List<Document> documentList= documentRepository.findAllWithLatestVersion();
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, ENTIRE_LIST);
 
         return collectionModel;

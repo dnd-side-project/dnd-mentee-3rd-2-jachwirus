@@ -89,6 +89,7 @@ public class LoadDatabase {
                 createdAt,
                 diff,
                 document,
+                documentRepository,
                 documentVersionRepository
         );
 
@@ -107,6 +108,7 @@ public class LoadDatabase {
                 createdAt,
                 diff,
                 document,
+                documentRepository,
                 documentVersionRepository
         );
 
@@ -116,7 +118,7 @@ public class LoadDatabase {
         String tagName2 = "world";
         addHashTag(tagName2, document, documentHashTagRepository, hashTagRepository);
 
-        documentRepository.findAll().forEach(doc -> log.info("Preloaded" + doc));
+        documentRepository.findAllWithLatestVersion().forEach(doc -> log.info("Preloaded" + doc));
     }
 
     private void addNewVersion(
@@ -127,6 +129,7 @@ public class LoadDatabase {
             Date createdAt,
             String diff,
             Document document,
+            DocumentRepository documentRepository,
             DocumentVersionRepository documentVersionRepository
     ) {
         DocumentVersion version = new DocumentVersion()
@@ -137,6 +140,7 @@ public class LoadDatabase {
                 .setDiff(diff);
         document.addNewVersion(version);
         documentVersionRepository.save(version);
+        documentRepository.save(document);
     }
 
     private void addHashTag(
@@ -154,12 +158,3 @@ public class LoadDatabase {
     }
 
 }
-//Caused by: org.hibernate.LazyInitializationException:
-// failed to lazily initialize a collection of role:
-// com.jachwirus.documentreadapi.model.Document.comments, could not initialize proxy
-// - no Session
-//	at org.hibernate.collection.internal.AbstractPersistentCollection.throwLazyInitializationException(AbstractPersistentCollection.java:606) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
-//	at org.hibernate.collection.internal.AbstractPersistentCollection.withTemporarySessionIfNeeded(AbstractPersistentCollection.java:218) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
-//	at org.hibernate.collection.internal.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:585) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
-//	at org.hibernate.collection.internal.AbstractPersistentCollection.read(AbstractPersistentCollection.java:149) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]
-//	at org.hibernate.collection.internal.PersistentBag.toString(PersistentBag.java:621) ~[hibernate-core-5.4.18.Final.jar:5.4.18.Final]

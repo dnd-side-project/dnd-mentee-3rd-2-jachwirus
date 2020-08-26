@@ -22,7 +22,7 @@ public class DocumentController {
     @GetMapping("")
     @ApiOperation(value = "위키 데이터 리스트 조회")
     public CollectionModel<EntityModel<DocumentInfoDto>> findList(
-            @RequestParam(defaultValue = ENTIRE_LIST, value = "category", name="category", required = false)
+            @RequestParam(value = "category", name="category", required = false)
             String category
     ){
         CollectionModel<EntityModel<DocumentInfoDto>> collection

@@ -3,13 +3,14 @@ package com.jachwirus.documentreadapi.model;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Getter
 @Setter
-@ToString(exclude = {"versions", "comments", "tags"})
+@ToString(exclude = {"latestVersion", "versions", "comments", "tags"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @Accessors(chain=true)
@@ -22,15 +23,22 @@ public class Document {
     private int viewCount;
     private String category;
 
-    @OneToMany(mappedBy = "document")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "latest_version_id")
+    private DocumentVersion latestVersion;
+
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<DocumentVersion> versions = new ArrayList<>();
-    @OneToMany(mappedBy = "document")
+
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
-    @OneToMany(mappedBy = "document")
+
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<DocumentHashTag> tags = new ArrayList<>();
 
     public void addNewVersion(DocumentVersion version){
         version.setDocument(this);
+        this.setLatestVersion(version);
         this.versions.add(version);
     }
 
@@ -41,3 +49,5 @@ public class Document {
         tag.getDocuments().add(mapping);
     }
 }
+
+// SELECT * FROM Document inner join

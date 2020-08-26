@@ -22,4 +22,6 @@ public class User {
 //    private Point location;
     @OneToMany(mappedBy = "contributor")
     private List<DocumentVersion> contributedList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> commentList;
 }
