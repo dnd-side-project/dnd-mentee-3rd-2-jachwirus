@@ -3,13 +3,14 @@ package com.jachwirus.documentreadapi.dto.mapper;
 import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
 import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.model.DocumentVersion;
+import com.jachwirus.documentreadapi.util.HashTagParser;
 
 import java.util.List;
 
 public class DocumentInfoDtoMapper {
     public static DocumentInfoDto toDocumentInfoDto(Document document) {
         DocumentVersion lastVersion = document.getLatestVersion();
-        List<String> hashTags = Util.getHashTags(document.getTags());
+        List<String> hashTags = HashTagParser.extractHashTagsName(document.getTags());
         int numberOfComments = document.getComments().size();
 
         return new DocumentInfoDto()
