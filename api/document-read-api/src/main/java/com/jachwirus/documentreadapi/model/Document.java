@@ -8,11 +8,8 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @ToString(exclude = {"latestVersion", "versions", "comments", "tags"})
-@EqualsAndHashCode
-@NoArgsConstructor
 @Accessors(chain=true)
 public class Document {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)

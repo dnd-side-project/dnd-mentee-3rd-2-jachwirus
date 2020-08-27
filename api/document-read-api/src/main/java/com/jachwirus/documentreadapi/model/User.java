@@ -7,11 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Data
 public class User {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;

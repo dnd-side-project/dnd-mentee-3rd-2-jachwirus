@@ -6,11 +6,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Data
 @Accessors(chain=true)
 public class DocumentHashTag {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)

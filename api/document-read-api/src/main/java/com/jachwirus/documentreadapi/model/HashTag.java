@@ -8,11 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Data
 @Accessors(chain=true)
 public class HashTag {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)

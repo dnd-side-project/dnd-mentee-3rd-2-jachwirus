@@ -5,11 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Data
 public class HotChart {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;

@@ -6,11 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Data
 public class Comment {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;

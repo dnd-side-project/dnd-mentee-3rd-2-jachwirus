@@ -9,11 +9,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Getter
-@Setter
+@Data
 @ToString(exclude = {"contributor", "document"})
-@EqualsAndHashCode
-@NoArgsConstructor
 @Accessors(chain=true)
 public class DocumentVersion {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
