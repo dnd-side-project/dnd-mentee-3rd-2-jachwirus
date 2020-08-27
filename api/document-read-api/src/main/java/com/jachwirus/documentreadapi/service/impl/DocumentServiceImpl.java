@@ -1,7 +1,5 @@
 package com.jachwirus.documentreadapi.service.impl;
 
-import static com.jachwirus.documentreadapi.controller.DocumentController.ENTIRE_LIST;
-
 import com.jachwirus.documentreadapi.controller.DocumentController;
 import com.jachwirus.documentreadapi.dto.assembler.DocumentDetailAssembler;
 import com.jachwirus.documentreadapi.dto.mapper.DocumentDetailDtoMapper;
@@ -12,23 +10,18 @@ import com.jachwirus.documentreadapi.exception.SortTargetNotSupportedException;
 import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.exception.DocumentNotFoundException;
 import com.jachwirus.documentreadapi.dto.assembler.DocumentInfoAssembler;
-import com.jachwirus.documentreadapi.model.DocumentHashTag;
 import com.jachwirus.documentreadapi.repository.DocumentHashTagRepository;
 import com.jachwirus.documentreadapi.repository.DocumentRepository;
 
 import com.jachwirus.documentreadapi.repository.HotChartRepository;
 import com.jachwirus.documentreadapi.service.DocumentService;
 import com.jachwirus.documentreadapi.util.DefaultValue;
-import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -58,14 +51,20 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category, String sortTarget) {
-        boolean isCategoryEmpty = category == null || category.equals("");
-        boolean isCategoryEntire = isCategoryEmpty || category.equals(ENTIRE_LIST);
+    public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(
+            Optional<String> category,
+            Optional<String> sortTarget
+    ) {
+        boolean isCategoryEmpty = Optional.ofNullable(category)
+                .get()
+                .orElse("")
+                .equals("");
+        boolean isCategoryEntire = isCategoryEmpty || category.get().equals(DefaultValue.category);
 
         if(isCategoryEntire){
-            return findAllDocumentSortBy(sortTarget);
+            return findAllDocumentSortBy(DefaultValue.sortTarget);
         }else{
-            return findByCategory(category);
+            return findByCategory(category.get());
         }
     }
 
@@ -115,7 +114,7 @@ public class DocumentServiceImpl implements DocumentService {
             String selfLinkInfo
     ) {
         List<EntityModel<DocumentInfoDto>> documents = toEntityModelList(documentList);
-        Link selfLink = linkTo(methodOn(DocumentController.class).findList(selfLinkInfo, DefaultValue.sortTarget)).withSelfRel();
+        Link selfLink = linkTo(methodOn(DocumentController.class).findList(Optional.of(selfLinkInfo), Optional.of(DefaultValue.sortTarget))).withSelfRel();
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = CollectionModel.of(documents, selfLink);
 
         return collectionModel;

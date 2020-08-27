@@ -8,12 +8,12 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/documents")
 public class DocumentController {
-    public static final String ENTIRE_LIST = "ENTIRE";
-
     private final DocumentService documentService;
     public DocumentController(DocumentService documentService){
         this.documentService = documentService;
@@ -23,9 +23,9 @@ public class DocumentController {
     @ApiOperation(value = "위키 데이터 리스트 조회")
     public CollectionModel<EntityModel<DocumentInfoDto>> findList(
             @RequestParam(value = "category", required = false)
-            String category,
+            Optional<String> category,
             @RequestParam(value = "sortBy", required = false)
-            String sortTarget
+            Optional<String> sortTarget
     ){
         CollectionModel<EntityModel<DocumentInfoDto>> collection
                 = documentService.findDocumentsList(category, sortTarget);
