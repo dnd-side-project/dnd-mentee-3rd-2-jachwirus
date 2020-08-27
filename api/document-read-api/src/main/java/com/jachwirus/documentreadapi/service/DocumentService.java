@@ -6,8 +6,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
 public interface DocumentService {
-    CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category);
+    CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category, String sortTarget);
     EntityModel<DocumentDetailDto> findDocumentById(Long id);
-    CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList();
-    CollectionModel<EntityModel<DocumentInfoDto>> getRecentChartDocumentList();
 }

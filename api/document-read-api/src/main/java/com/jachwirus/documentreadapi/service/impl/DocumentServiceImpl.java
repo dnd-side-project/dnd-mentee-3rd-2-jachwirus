@@ -8,6 +8,7 @@ import com.jachwirus.documentreadapi.dto.mapper.DocumentDetailDtoMapper;
 import com.jachwirus.documentreadapi.dto.mapper.DocumentInfoDtoMapper;
 import com.jachwirus.documentreadapi.dto.model.DocumentDetailDto;
 import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
+import com.jachwirus.documentreadapi.exception.SortTargetNotSupportedException;
 import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.exception.DocumentNotFoundException;
 import com.jachwirus.documentreadapi.dto.assembler.DocumentInfoAssembler;
@@ -17,6 +18,8 @@ import com.jachwirus.documentreadapi.repository.DocumentRepository;
 
 import com.jachwirus.documentreadapi.repository.HotChartRepository;
 import com.jachwirus.documentreadapi.service.DocumentService;
+import com.jachwirus.documentreadapi.util.DefaultValue;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -55,22 +58,50 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category) {
+    public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category, String sortTarget) {
         boolean isCategoryEmpty = category == null || category.equals("");
         boolean isCategoryEntire = isCategoryEmpty || category.equals(ENTIRE_LIST);
 
         if(isCategoryEntire){
-            return findAllDocument();
+            return findAllDocumentSortBy(sortTarget);
         }else{
             return findByCategory(category);
         }
     }
 
-    private CollectionModel<EntityModel<DocumentInfoDto>> findAllDocument(){
-        List<Document> documentList= documentRepository.findAllWithLatestVersion();
-        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, ENTIRE_LIST);
+    private CollectionModel<EntityModel<DocumentInfoDto>> findAllDocumentSortBy(String sortTarget) {
+        String parsedSortTarget = getSortTargetWithCheckValidation(sortTarget);
+//        List<Document> documentList= documentRepository.findAllWithLatestVersion(Sort.by(sortTarget));
+//        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, ENTIRE_LIST);
 
-        return collectionModel;
+//        return collectionModel;
+        if(parsedSortTarget.equals("id")) {
+            return getRecentChartDocumentList();
+        }else if(parsedSortTarget.equals("view_count")){
+            return getHotChartDocumentList();
+        }
+        return null;
+    }
+
+    private String getSortTargetWithCheckValidation(String sortTarget) {
+        final String latest = "latest";
+        final String popularity = "popularity";
+
+        boolean isSortTargetEmpty = sortTarget == null || sortTarget.equals("");
+        boolean isSortTargetLatest = isSortTargetEmpty || sortTarget.equals(latest);
+        boolean isSortTargetPopularity = sortTarget != null && sortTarget.equals(popularity);
+        boolean isSortTypeSupportable = isSortTargetLatest || isSortTargetPopularity;
+
+        if( isSortTypeSupportable ) {
+            if( isSortTargetLatest ) {
+                sortTarget = "id";
+            } else if ( isSortTargetPopularity ) {
+                sortTarget = "view_count";
+            }
+            return sortTarget;
+        }
+
+        throw new SortTargetNotSupportedException(sortTarget);
     }
 
     private CollectionModel<EntityModel<DocumentInfoDto>> findByCategory(String category){
@@ -84,7 +115,7 @@ public class DocumentServiceImpl implements DocumentService {
             String selfLinkInfo
     ) {
         List<EntityModel<DocumentInfoDto>> documents = toEntityModelList(documentList);
-        Link selfLink = linkTo(methodOn(DocumentController.class).findList(selfLinkInfo)).withSelfRel();
+        Link selfLink = linkTo(methodOn(DocumentController.class).findList(selfLinkInfo, DefaultValue.sortTarget)).withSelfRel();
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = CollectionModel.of(documents, selfLink);
 
         return collectionModel;
@@ -109,21 +140,20 @@ public class DocumentServiceImpl implements DocumentService {
         return result;
     }
 
-    @Override
-    public CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList() {
+    private CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList() {
         List<Document> list = hotChartRepository.findAll().stream()
                 .map(e -> e.getDocument())
                 .collect(Collectors.toList());
         Collections.sort(list, Comparator.comparingInt(Document::getViewCount)); // need to modify sort in query
-        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, "/hot-chart");
+        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, DefaultValue.category);
         return collectionModel;
     }
 
-    @Override
-    public CollectionModel<EntityModel<DocumentInfoDto>> getRecentChartDocumentList() {
+
+    private CollectionModel<EntityModel<DocumentInfoDto>> getRecentChartDocumentList() {
         List<Document> list = documentRepository.findAll();
         Collections.sort(list, Comparator.comparingLong(Document::getId).reversed());//need to do at query
-        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, "/recent");
+        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, DefaultValue.category);
         return collectionModel;
     }
 }

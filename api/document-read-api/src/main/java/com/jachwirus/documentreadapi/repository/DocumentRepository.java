@@ -1,6 +1,7 @@
 package com.jachwirus.documentreadapi.repository;
 
 import com.jachwirus.documentreadapi.model.Document;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -22,35 +22,20 @@ public class DocumentController {
     @GetMapping("")
     @ApiOperation(value = "위키 데이터 리스트 조회")
     public CollectionModel<EntityModel<DocumentInfoDto>> findList(
-            @RequestParam(value = "category", name="category", required = false)
-            String category
+            @RequestParam(value = "category", required = false)
+            String category,
+            @RequestParam(value = "sortBy", required = false)
+            String sortTarget
     ){
         CollectionModel<EntityModel<DocumentInfoDto>> collection
-                = documentService.findDocumentsList(category);
+                = documentService.findDocumentsList(category, sortTarget);
         return collection;
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "위키 문서 상세 조회")
     public EntityModel<DocumentDetailDto> findOne(@PathVariable Long id){
-        //need to be changed
         EntityModel<DocumentDetailDto> model = documentService.findDocumentById(id);
         return model;
-    }
-
-    @GetMapping("/hot-chart")
-    @ApiOperation(value = "인기 게시물 조회")
-    public CollectionModel<EntityModel<DocumentInfoDto>> getHotDocument(){
-        CollectionModel<EntityModel<DocumentInfoDto>> collection
-                = documentService.getHotChartDocumentList();
-        return collection;
-    }
-
-    @GetMapping("/recent")
-    @ApiOperation(value = "최신 업데이트 게시물 조회")
-    public CollectionModel<EntityModel<DocumentInfoDto>> getRecentDocumentList() {
-        CollectionModel<EntityModel<DocumentInfoDto>> collection
-                = documentService.getRecentChartDocumentList();
-        return collection;
     }
 }
