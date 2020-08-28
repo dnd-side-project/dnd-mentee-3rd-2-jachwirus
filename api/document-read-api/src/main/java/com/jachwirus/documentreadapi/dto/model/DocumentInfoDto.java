@@ -6,16 +6,12 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
+@Data
 @Accessors(chain=true)
 public class DocumentInfoDto {
     private Long id;
     private String title;
     private String thumbnailURL;
-    private String dataURL;
     private int likes;
     private int dislikes;
     private int viewCount;

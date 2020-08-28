@@ -75,7 +75,7 @@ public class LoadDatabase {
         documentRepository.save(document);
 
         contributorId = 1;
-        dataUrl="tmp1.com"; ;
+        dataUrl="http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md"; ;
         thumbnailUrl="tmp1Thumnail.com";
         flag = 123;
         createdAt = new Date();
@@ -94,7 +94,7 @@ public class LoadDatabase {
         );
 
         contributorId = 2;
-        dataUrl="tmp2.com"; ;
+        dataUrl="http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html"; ;
         thumbnailUrl="tmp2Thumnail.com";
         flag = 12345;
         createdAt = new Date();

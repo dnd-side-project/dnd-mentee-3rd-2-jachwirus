@@ -130,13 +130,19 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public EntityModel<DocumentDetailDto> findDocumentById(Long id) {
+    public Document findDocumentById(Long id) {
         Document document = documentRepository.findById(id)
                 .orElseThrow(() -> new DocumentNotFoundException(id));
-        DocumentDetailDto dto = DocumentDetailDtoMapper.toDocumentDetailDto(document);
-        EntityModel<DocumentDetailDto> result = documentDetailAssembler.toModel(dto);
 
-        return result;
+        return document;
+    }
+
+    @Override
+    public EntityModel<DocumentDetailDto> getDocumentDetailModel(Document document, String contents) {
+        DocumentDetailDto dto = DocumentDetailDtoMapper.toDocumentDetailDto(document, contents);
+        EntityModel<DocumentDetailDto> model = new DocumentDetailAssembler().toModel(dto);
+
+        return model;
     }
 
     private CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList() {
