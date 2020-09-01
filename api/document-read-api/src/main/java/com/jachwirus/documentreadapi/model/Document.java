@@ -46,5 +46,3 @@ public class Document {
         tag.getDocuments().add(mapping);
     }
 }
-
-// SELECT * FROM Document inner join

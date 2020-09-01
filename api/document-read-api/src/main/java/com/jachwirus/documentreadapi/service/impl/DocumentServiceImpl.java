@@ -16,6 +16,7 @@ import com.jachwirus.documentreadapi.repository.DocumentRepository;
 import com.jachwirus.documentreadapi.repository.HotChartRepository;
 import com.jachwirus.documentreadapi.service.DocumentService;
 import com.jachwirus.documentreadapi.util.DefaultValue;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -52,52 +53,63 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(
-            Optional<String> category,
-            Optional<String> sortTarget
+            Optional<String> inputCategory,
+            Optional<String> inputSortTarget
     ) {
-        boolean isCategoryEmpty = Optional.ofNullable(category)
-                .get()
-                .orElse("")
-                .equals("");
-        boolean isCategoryEntire = isCategoryEmpty || category.get().equals(DefaultValue.category);
+        String category = getString(inputCategory, DefaultValue.category);
+        String sortTarget = getString(inputSortTarget, DefaultValue.sortTarget);
+
+        boolean isCategoryEntire = category.equals(DefaultValue.category);
 
         if(isCategoryEntire){
-            return findAllDocumentSortBy(DefaultValue.sortTarget);
+            return findAllDocumentSortBy(sortTarget);
         }else{
-            return findByCategory(category.get());
+            return findByCategory(category);
+        }
+    }
+
+    private String getString(Optional<String> str, String defaultValue) {
+        final String empty = "";
+        String value =  Optional.ofNullable(str).get().orElse(empty);
+        if(value.equals(empty)) {
+            return defaultValue;
+        }else{
+            return value;
         }
     }
 
     private CollectionModel<EntityModel<DocumentInfoDto>> findAllDocumentSortBy(String sortTarget) {
-        String parsedSortTarget = getSortTargetWithCheckValidation(sortTarget);
-//        List<Document> documentList= documentRepository.findAllWithLatestVersion(Sort.by(sortTarget));
-//        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, ENTIRE_LIST);
+        Sort order = getSortTargetWithCheckValidation(sortTarget);
 
-//        return collectionModel;
-        if(parsedSortTarget.equals("id")) {
-            return getRecentChartDocumentList();
-        }else if(parsedSortTarget.equals("view_count")){
-            return getHotChartDocumentList();
-        }
-        return null;
+        List<Document> documentList = getDocumentListOrderBy(order);
+        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, DefaultValue.category);
+
+        return collectionModel;
     }
 
-    private String getSortTargetWithCheckValidation(String sortTarget) {
-        final String latest = "latest";
+    private List<Document> getDocumentListOrderBy(Sort order) {
+        return documentRepository.findAllWithLatestVersionAndAndComments(order);
+    }
+
+    private Sort getSortTargetWithCheckValidation(String sortTarget) {
+        final String latest = DefaultValue.sortTarget;
         final String popularity = "popularity";
 
-        boolean isSortTargetEmpty = sortTarget == null || sortTarget.equals("");
-        boolean isSortTargetLatest = isSortTargetEmpty || sortTarget.equals(latest);
-        boolean isSortTargetPopularity = sortTarget != null && sortTarget.equals(popularity);
+        boolean isSortTargetLatest = sortTarget.equals(latest);
+        boolean isSortTargetPopularity = sortTarget.equals(popularity);
         boolean isSortTypeSupportable = isSortTargetLatest || isSortTargetPopularity;
 
         if( isSortTypeSupportable ) {
+            Sort order = null;
             if( isSortTargetLatest ) {
                 sortTarget = "id";
+                order = Sort.by(Sort.Direction.DESC, sortTarget);
             } else if ( isSortTargetPopularity ) {
-                sortTarget = "view_count";
+                sortTarget = "viewCount";
+                order = Sort.by(Sort.Direction.DESC, sortTarget)
+                        .and(Sort.by(Sort.Direction.DESC, "id"));
             }
-            return sortTarget;
+            return order;
         }
 
         throw new SortTargetNotSupportedException(sortTarget);
@@ -143,22 +155,5 @@ public class DocumentServiceImpl implements DocumentService {
         EntityModel<DocumentDetailDto> model = new DocumentDetailAssembler().toModel(dto);
 
         return model;
-    }
-
-    private CollectionModel<EntityModel<DocumentInfoDto>> getHotChartDocumentList() {
-        List<Document> list = hotChartRepository.findAll().stream()
-                .map(e -> e.getDocument())
-                .collect(Collectors.toList());
-        Collections.sort(list, Comparator.comparingInt(Document::getViewCount)); // need to modify sort in query
-        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, DefaultValue.category);
-        return collectionModel;
-    }
-
-
-    private CollectionModel<EntityModel<DocumentInfoDto>> getRecentChartDocumentList() {
-        List<Document> list = documentRepository.findAll();
-        Collections.sort(list, Comparator.comparingLong(Document::getId).reversed());//need to do at query
-        CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(list, DefaultValue.category);
-        return collectionModel;
     }
 }

@@ -66,7 +66,7 @@ public class LoadDatabase {
         title = "tmp1";
         like=1;
         dislike=0;
-        view_count = 12;
+        view_count = 1;
         category="laundry";
 
         Document document = new Document()
@@ -149,12 +149,18 @@ public class LoadDatabase {
             DocumentHashTagRepository documentHashTagRepository,
             HashTagRepository hashTagRepository
     ) {
-        HashTag tag = new HashTag().setTagName(tagName);
+        HashTag tag = getHashTag(hashTagRepository, tagName);
         DocumentHashTag mapping = new DocumentHashTag();
 
         document.addHashTag(mapping, tag);
         hashTagRepository.save(tag);
         documentHashTagRepository.save(mapping);
+    }
+
+    private HashTag getHashTag(HashTagRepository repository, String tagName) {
+        HashTag tag = repository.findByTagName(tagName)
+                .orElse(new HashTag().setTagName(tagName));
+        return tag;
     }
 
 }
