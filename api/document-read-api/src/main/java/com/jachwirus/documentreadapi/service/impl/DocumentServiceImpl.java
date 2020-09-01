@@ -11,6 +11,8 @@ import com.jachwirus.documentreadapi.repository.DocumentRepository;
 
 import com.jachwirus.documentreadapi.service.DocumentService;
 import com.jachwirus.documentreadapi.util.DefaultValue;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -26,109 +28,84 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class DocumentServiceImpl implements DocumentService {
     private DocumentRepository documentRepository;
-    private DocumentInfoAssembler documentInfoAssembler;
-    private DocumentDetailAssembler documentDetailAssembler;
 
-
-    public DocumentServiceImpl(
-            DocumentRepository documentRepository,
-            DocumentInfoAssembler documentInfoAssembler,
-            DocumentDetailAssembler documentDetailAssembler
-    ){
+    public DocumentServiceImpl(DocumentRepository documentRepository){
         this.documentRepository = documentRepository;
-        this.documentInfoAssembler = documentInfoAssembler;
-        this.documentDetailAssembler = documentDetailAssembler;
     }
 
     @Override
     public CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(
-            Optional<String> inputCategory,
-            Optional<String> inputSortTarget
+            String category,
+            String sortTarget,
+            String page
     ) {
-        String category = getString(inputCategory, DefaultValue.category);
-        String sortTarget = getString(inputSortTarget, DefaultValue.sortTarget);
-
         boolean isCategoryEntire = category.equals(DefaultValue.category);
+        int pageNumber = Integer.parseInt(page);
 
         if(isCategoryEntire){
-            return findAllDocumentSortBy(sortTarget);
+            return findAllDocumentSortBy(sortTarget, pageNumber);
         }else{
-            return findByCategory(category);
+            return findByCategory(category, pageNumber);
         }
     }
 
-    private String getString(Optional<String> str, String defaultValue) {
-        final String empty = "";
-        String value =  Optional.ofNullable(str).get().orElse(empty);
-        if(value.equals(empty)) {
-            return defaultValue;
-        }else{
-            return value;
-        }
-    }
-
-    private CollectionModel<EntityModel<DocumentInfoDto>> findAllDocumentSortBy(String sortTarget) {
-        Sort order = getSortTargetWithCheckValidation(sortTarget);
-
-        List<Document> documentList = getDocumentListOrderBy(order);
+    private CollectionModel<EntityModel<DocumentInfoDto>> findAllDocumentSortBy(
+            String sortTarget,
+            int page
+    ) {
+        Pageable pageable = PageRequest.of(page-1, DefaultValue.pageSize);
+        List<Document> documentList = findDocumentListOrderBy(sortTarget, pageable);
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, DefaultValue.category);
 
         return collectionModel;
     }
 
-    private List<Document> getDocumentListOrderBy(Sort order) {
-        return documentRepository.findAll(order);
-    }
-
-    private Sort getSortTargetWithCheckValidation(String sortTarget) {
-        final String latest = DefaultValue.sortTarget;
-        final String popularity = "popularity";
-
-        boolean isSortTargetLatest = sortTarget.equals(latest);
-        boolean isSortTargetPopularity = sortTarget.equals(popularity);
-        boolean isSortTypeSupportable = isSortTargetLatest || isSortTargetPopularity;
-
-        if( isSortTypeSupportable ) {
-            Sort order = null;
-            if( isSortTargetLatest ) {
-                sortTarget = "id";
-                order = Sort.by(Sort.Direction.DESC, sortTarget);
-            } else if ( isSortTargetPopularity ) {
-                sortTarget = "viewCount";
-                order = Sort.by(Sort.Direction.DESC, sortTarget)
-                        .and(Sort.by(Sort.Direction.DESC, "id"));
-            }
-            return order;
+    private List<Document> findDocumentListOrderBy(String sortTarget, Pageable pageable) {
+        if(sortTarget.equals(DefaultValue.sortTarget)) {
+            return documentRepository.findAllOrderByLatest(pageable);
+        }else if(sortTarget.equals("popularity")) {
+            return documentRepository.findAllOrderByPopularity(pageable);
+        }else {
+            throw new SortTargetNotSupportedException(sortTarget);
         }
-
-        throw new SortTargetNotSupportedException(sortTarget);
     }
 
-    private CollectionModel<EntityModel<DocumentInfoDto>> findByCategory(String category){
-        List<Document> documentList = documentRepository.findByCategory(category);
+    private CollectionModel<EntityModel<DocumentInfoDto>> findByCategory(
+            String category,
+            int page
+    ){
+        Pageable pageable = PageRequest.of(page-1, DefaultValue.pageSize);
+        List<Document> documentList = documentRepository.findByCategory(category, pageable);
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = toCollectionModel(documentList, category);
+
         return collectionModel;
     }
 
     private  CollectionModel<EntityModel<DocumentInfoDto>> toCollectionModel(
             List<Document> documentList,
-            String selfLinkInfo
+            String selfLinkPath
     ) {
+        String sortInfo = DefaultValue.sortTarget;
+        String page = DefaultValue.page;
+
         List<EntityModel<DocumentInfoDto>> documents = toEntityModelList(documentList);
-        Link selfLink = linkTo(methodOn(DocumentController.class).findList(Optional.of(selfLinkInfo), Optional.of(DefaultValue.sortTarget))).withSelfRel();
+        Link selfLink = linkTo(methodOn(DocumentController.class).findList(selfLinkPath, sortInfo, page)).withSelfRel();
+
         CollectionModel<EntityModel<DocumentInfoDto>> collectionModel = CollectionModel.of(documents, selfLink);
 
         return collectionModel;
     }
 
     private List<EntityModel<DocumentInfoDto>> toEntityModelList(List<Document> documentList) {
-        List<DocumentInfoDto> documentListElementDtoInfo = documentList.stream()
-                .map(DocumentInfoDtoMapper::toDocumentInfoDto).collect(Collectors.toList());
-        List<EntityModel<DocumentInfoDto>> result = documentListElementDtoInfo.stream()
-                .map(documentInfoAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<DocumentInfoDto>> entityModelList = documentList.stream()
+                .map(DocumentInfoDtoMapper::toDocumentInfoDto)
+                .map(dto -> new DocumentInfoAssembler().toModel(dto))
+                .collect(Collectors.toList());
 
-        return result;
+        return entityModelList;
     }
+
+
 
     @Override
     public Document findDocumentById(Long id) {

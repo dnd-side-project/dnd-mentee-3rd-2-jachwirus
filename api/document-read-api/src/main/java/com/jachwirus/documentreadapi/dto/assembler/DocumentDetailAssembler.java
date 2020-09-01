@@ -17,14 +17,16 @@ public class DocumentDetailAssembler implements
         RepresentationModelAssembler<DocumentDetailDto, EntityModel<DocumentDetailDto>> {
     @Override
     public EntityModel<DocumentDetailDto> toModel(DocumentDetailDto documentDetailDto) {
-        Optional<String> category = Optional.of(documentDetailDto.getCategory());
-        Optional<String> defaultSortTarget = Optional.of(DefaultValue.sortTarget);
-        Optional<String> defaultCategory = Optional.of(DefaultValue.category);
+        long id = documentDetailDto.getId();
+        String category = documentDetailDto.getCategory();
+        String defaultCategory = DefaultValue.category;
+        String defaultSortTarget = DefaultValue.sortTarget;
+        String defaultPage = DefaultValue.page;
 
         EntityModel<DocumentDetailDto> model = EntityModel.of(documentDetailDto,
-                linkTo(methodOn(DocumentController.class).findOne(documentDetailDto.getId())).withSelfRel(),
-                linkTo(methodOn(DocumentController.class).findList(category, defaultSortTarget)).withRel("category"),
-                linkTo(methodOn(DocumentController.class).findList(defaultCategory, defaultSortTarget)).withRel("documents")
+                linkTo(methodOn(DocumentController.class).findOne(id)).withSelfRel(),
+                linkTo(methodOn(DocumentController.class).findList(category, defaultSortTarget, defaultPage)).withRel("category"),
+                linkTo(methodOn(DocumentController.class).findList(defaultCategory, defaultSortTarget, defaultPage)).withRel("documents")
         );
         return model;
     }

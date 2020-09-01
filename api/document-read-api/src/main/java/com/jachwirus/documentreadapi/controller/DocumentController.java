@@ -5,6 +5,7 @@ import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
 import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.service.DocumentService;
 import com.jachwirus.documentreadapi.service.RestService;
+import com.jachwirus.documentreadapi.util.DefaultValue;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -29,13 +30,15 @@ public class DocumentController {
     @GetMapping("")
     @ApiOperation(value = "위키 데이터 리스트 조회")
     public CollectionModel<EntityModel<DocumentInfoDto>> findList(
-            @RequestParam(value = "category", required = false)
-            Optional<String> category,
-            @RequestParam(value = "sortBy", required = false)
-            Optional<String> sortTarget
+            @RequestParam(value = "category", required = false, defaultValue = DefaultValue.category)
+            String category,
+            @RequestParam(value = "sortBy", required = false, defaultValue = DefaultValue.sortTarget)
+            String sortTarget,
+            @RequestParam(value = "page", required = false, defaultValue = DefaultValue.page)
+            String page
     ){
         CollectionModel<EntityModel<DocumentInfoDto>> collection
-                = documentService.findDocumentsList(category, sortTarget);
+                = documentService.findDocumentsList(category, sortTarget, page);
 
         return collection;
     }
