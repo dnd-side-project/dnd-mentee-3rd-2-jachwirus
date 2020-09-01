@@ -13,7 +13,7 @@ public class Comment {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")
     private Document document;
 

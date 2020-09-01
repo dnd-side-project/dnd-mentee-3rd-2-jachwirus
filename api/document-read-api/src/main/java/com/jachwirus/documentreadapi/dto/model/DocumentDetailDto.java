@@ -1,6 +1,5 @@
 package com.jachwirus.documentreadapi.dto.model;
 
-import com.jachwirus.documentreadapi.model.Comment;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -12,6 +11,7 @@ import java.util.List;
 public class DocumentDetailDto{
     private Long id;
     private String title;
+    private String contributor;
     private String thumbnailURL;
     private String contents;
     private int likes;
@@ -20,6 +20,6 @@ public class DocumentDetailDto{
     private String category;
     private List<String> hashTags;
     private Date lastModified;
-    private List<Comment> comments;
+    private List<CommentDto> comments;
     private int flag;
 }

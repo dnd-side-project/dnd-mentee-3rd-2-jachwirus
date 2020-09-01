@@ -26,7 +26,8 @@ public class LoadDatabase {
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
             HashTagRepository hashTagRepository,
-            CommentRepository commentRepository
+            CommentRepository commentRepository,
+            UserRepository userRepository
     ) {
         final String env = environment.getActiveProfiles()[0];
         switch (env){
@@ -37,7 +38,8 @@ public class LoadDatabase {
                             documentVersionRepository,
                             documentHashTagRepository,
                             hashTagRepository,
-                            commentRepository
+                            commentRepository,
+                            userRepository
                     );
                 };
             default:
@@ -50,24 +52,36 @@ public class LoadDatabase {
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
             HashTagRepository hashTagRepository,
-            CommentRepository commentRepository
+            CommentRepository commentRepository,
+            UserRepository userRepository
     ){
+        User user = addUser(userRepository);
         Document document = new Document().setTitle("tmp1").setLikes(1).setDislikes(0).setViewCount(12).setCategory("laundry");
         documentRepository.save(document);
 
-        addNewVersion("http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
-        addNewVersion( "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion(user, "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion( user, "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
 
         addHashTag("hello", document, documentHashTagRepository, hashTagRepository);
         addHashTag("world", document, documentHashTagRepository, hashTagRepository);
 
-        addComments("hihihi", document, documentRepository, commentRepository);
-        addComments("byebyebye", document, documentRepository, commentRepository);
+        addComments(user, "hihihi", document, documentRepository, commentRepository);
+        addComments(user, "byebyebye", document, documentRepository, commentRepository);
 
         documentRepository.findAll().forEach(doc -> log.info("Preloaded" + doc));
     }
 
+    private User addUser(UserRepository userRepository) {
+        User user = new User()
+                .setUserId("hello")
+                .setPassword("world")
+                .setNickname("Johnie");
+        userRepository.save(user);
+        return user;
+    }
+
     private void addComments(
+            User user,
             String contents,
             Document document,
             DocumentRepository documentRepository,
@@ -77,12 +91,14 @@ public class LoadDatabase {
                 .setContents(contents)
                 .setCreatedAt(new Date())
                 .setModified(false);
+        user.writeComment(comment);
         document.addComment(comment);
         commentRepository.save(comment);
         documentRepository.save(document);
     }
 
     private void addNewVersion(
+            User user,
             String dataUrl,
             String thumbnailUrl,
             int flag,
@@ -98,6 +114,7 @@ public class LoadDatabase {
                 .setFlag(flag)
                 .setCreatedAt(createdAt)
                 .setDiff(diff);
+        user.contributeDocument(version);
         document.addNewVersion(version);
         documentVersionRepository.save(version);
         documentRepository.save(document);
