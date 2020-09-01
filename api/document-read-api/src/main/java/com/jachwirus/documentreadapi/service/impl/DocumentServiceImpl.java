@@ -1,19 +1,14 @@
 package com.jachwirus.documentreadapi.service.impl;
 
 import com.jachwirus.documentreadapi.controller.DocumentController;
-import com.jachwirus.documentreadapi.dto.assembler.DocumentDetailAssembler;
-import com.jachwirus.documentreadapi.dto.mapper.DocumentDetailDtoMapper;
-import com.jachwirus.documentreadapi.dto.mapper.DocumentInfoDtoMapper;
-import com.jachwirus.documentreadapi.dto.model.DocumentDetailDto;
-import com.jachwirus.documentreadapi.dto.model.DocumentInfoDto;
+import com.jachwirus.documentreadapi.dto.assembler.*;
+import com.jachwirus.documentreadapi.dto.mapper.*;
+import com.jachwirus.documentreadapi.dto.model.*;
 import com.jachwirus.documentreadapi.exception.SortTargetNotSupportedException;
-import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.exception.DocumentNotFoundException;
-import com.jachwirus.documentreadapi.dto.assembler.DocumentInfoAssembler;
-import com.jachwirus.documentreadapi.repository.DocumentHashTagRepository;
+import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.repository.DocumentRepository;
 
-import com.jachwirus.documentreadapi.repository.HotChartRepository;
 import com.jachwirus.documentreadapi.service.DocumentService;
 import com.jachwirus.documentreadapi.util.DefaultValue;
 import org.springframework.data.domain.Sort;
@@ -31,22 +26,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class DocumentServiceImpl implements DocumentService {
     private DocumentRepository documentRepository;
-    private DocumentHashTagRepository documentHashTagRepository;
-    private HotChartRepository hotChartRepository;
     private DocumentInfoAssembler documentInfoAssembler;
     private DocumentDetailAssembler documentDetailAssembler;
 
 
     public DocumentServiceImpl(
             DocumentRepository documentRepository,
-            DocumentHashTagRepository documentHashTagRepository,
-            HotChartRepository hotChartRepository,
             DocumentInfoAssembler documentInfoAssembler,
             DocumentDetailAssembler documentDetailAssembler
     ){
         this.documentRepository = documentRepository;
-        this.documentHashTagRepository = documentHashTagRepository;
-        this.hotChartRepository = hotChartRepository;
         this.documentInfoAssembler = documentInfoAssembler;
         this.documentDetailAssembler = documentDetailAssembler;
     }
@@ -88,7 +77,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private List<Document> getDocumentListOrderBy(Sort order) {
-        return documentRepository.findAllWithLatestVersionAndAndComments(order);
+        return documentRepository.findAll(order);
     }
 
     private Sort getSortTargetWithCheckValidation(String sortTarget) {

@@ -45,4 +45,9 @@ public class Document {
         this.tags.add(mapping);
         tag.getDocuments().add(mapping);
     }
+
+    public void addComment(Comment comment) {
+        comment.setDocument(this);
+        comments.add(comment);
+    }
 }

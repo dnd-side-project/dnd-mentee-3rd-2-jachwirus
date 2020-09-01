@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
+@ToString(exclude = "documents")
 @Accessors(chain=true)
 @Table(indexes = {@Index(name = "hash_tag_index", columnList = "tag_name", unique = true)})
 public class HashTag {

@@ -1,13 +1,7 @@
 package com.jachwirus.documentreadapi.config;
 
-import com.jachwirus.documentreadapi.model.Document;
-import com.jachwirus.documentreadapi.model.DocumentHashTag;
-import com.jachwirus.documentreadapi.model.DocumentVersion;
-import com.jachwirus.documentreadapi.model.HashTag;
-import com.jachwirus.documentreadapi.repository.DocumentHashTagRepository;
-import com.jachwirus.documentreadapi.repository.DocumentRepository;
-import com.jachwirus.documentreadapi.repository.DocumentVersionRepository;
-import com.jachwirus.documentreadapi.repository.HashTagRepository;
+import com.jachwirus.documentreadapi.model.*;
+import com.jachwirus.documentreadapi.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +25,8 @@ public class LoadDatabase {
             DocumentRepository documentRepository,
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
-            HashTagRepository hashTagRepository
+            HashTagRepository hashTagRepository,
+            CommentRepository commentRepository
     ) {
         final String env = environment.getActiveProfiles()[0];
         switch (env){
@@ -41,7 +36,8 @@ public class LoadDatabase {
                             documentRepository,
                             documentVersionRepository,
                             documentHashTagRepository,
-                            hashTagRepository
+                            hashTagRepository,
+                            commentRepository
                     );
                 };
             default:
@@ -53,76 +49,40 @@ public class LoadDatabase {
             DocumentRepository documentRepository,
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
-            HashTagRepository hashTagRepository
+            HashTagRepository hashTagRepository,
+            CommentRepository commentRepository
     ){
-        String title, category;
-        int like, dislike, view_count;
-
-        String dataUrl, thumbnailUrl, diff;
-        long contributorId;
-        int flag;
-        Date createdAt;
-
-        title = "tmp1";
-        like=1;
-        dislike=0;
-        view_count = 1;
-        category="laundry";
-
-        Document document = new Document()
-                .setTitle(title).setLikes(like).setDislikes(dislike)
-                .setViewCount(view_count).setCategory(category);
+        Document document = new Document().setTitle("tmp1").setLikes(1).setDislikes(0).setViewCount(12).setCategory("laundry");
         documentRepository.save(document);
 
-        contributorId = 1;
-        dataUrl="http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md"; ;
-        thumbnailUrl="tmp1Thumnail.com";
-        flag = 123;
-        createdAt = new Date();
-        diff = null;
+        addNewVersion("http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion( "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
 
-        addNewVersion(
-                contributorId,
-                dataUrl,
-                thumbnailUrl,
-                flag,
-                createdAt,
-                diff,
-                document,
-                documentRepository,
-                documentVersionRepository
-        );
+        addHashTag("hello", document, documentHashTagRepository, hashTagRepository);
+        addHashTag("world", document, documentHashTagRepository, hashTagRepository);
 
-        contributorId = 2;
-        dataUrl="http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html"; ;
-        thumbnailUrl="tmp2Thumnail.com";
-        flag = 12345;
-        createdAt = new Date();
-        diff = null;
+        addComments("hihihi", document, documentRepository, commentRepository);
+        addComments("byebyebye", document, documentRepository, commentRepository);
 
-        addNewVersion(
-                contributorId,
-                dataUrl,
-                thumbnailUrl,
-                flag,
-                createdAt,
-                diff,
-                document,
-                documentRepository,
-                documentVersionRepository
-        );
+        documentRepository.findAll().forEach(doc -> log.info("Preloaded" + doc));
+    }
 
-        String tagName = "hello";
-        addHashTag(tagName, document, documentHashTagRepository, hashTagRepository);
-
-        String tagName2 = "world";
-        addHashTag(tagName2, document, documentHashTagRepository, hashTagRepository);
-
-        documentRepository.findAllWithLatestVersion().forEach(doc -> log.info("Preloaded" + doc));
+    private void addComments(
+            String contents,
+            Document document,
+            DocumentRepository documentRepository,
+            CommentRepository commentRepository
+    ) {
+        Comment comment = new Comment()
+                .setContents(contents)
+                .setCreatedAt(new Date())
+                .setModified(false);
+        document.addComment(comment);
+        commentRepository.save(comment);
+        documentRepository.save(document);
     }
 
     private void addNewVersion(
-            long contributorId,
             String dataUrl,
             String thumbnailUrl,
             int flag,

@@ -9,23 +9,14 @@ import java.util.List;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Document> findByCategory(String category);
-    @Query("SELECT doc " +
-            "FROM Document doc " +
-            "INNER JOIN " +
-            "DocumentVersion version " +
-            "ON " +
-            "doc.latestVersion.id = version.id " +
-            "LEFT JOIN fetch " +
-            "doc.comments")
-    List<Document> findAllWithLatestVersion();
 
     @Query("SELECT doc " +
             "FROM Document doc " +
-            "INNER JOIN " +
-            "DocumentVersion version " +
-            "ON " +
-            "doc.latestVersion.id = version.id " +
+            "INNER JOIN fetch " +
+            "doc.latestVersion " +
             "LEFT JOIN fetch " +
-            "doc.comments")
-    List<Document> findAllWithLatestVersionAndAndComments(Sort sort);
+            "doc.tags as tags " +
+            "INNER JOIN fetch " +
+            "tags.hashTag")
+    List<Document> findAll(Sort sort);
 }

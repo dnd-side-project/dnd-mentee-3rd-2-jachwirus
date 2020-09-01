@@ -11,6 +11,8 @@ public interface HashTagRepository extends JpaRepository<HashTag, Long> {
             "tag " +
             "FROM HashTag tag " +
             "LEFT JOIN fetch " +
-            "tag.documents")
+            "tag.documents " +
+            "WHERE " +
+            "tag.tagName = ?1")
     Optional<HashTag> findByTagName(String name);
 }
