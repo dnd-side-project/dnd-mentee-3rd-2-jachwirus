@@ -6,6 +6,7 @@ import com.jachwirus.documentreadapi.dto.mapper.*;
 import com.jachwirus.documentreadapi.dto.model.*;
 import com.jachwirus.documentreadapi.exception.SortTargetNotSupportedException;
 import com.jachwirus.documentreadapi.exception.DocumentNotFoundException;
+import com.jachwirus.documentreadapi.model.Comment;
 import com.jachwirus.documentreadapi.model.Document;
 import com.jachwirus.documentreadapi.repository.DocumentRepository;
 
@@ -13,7 +14,6 @@ import com.jachwirus.documentreadapi.service.DocumentService;
 import com.jachwirus.documentreadapi.util.DefaultValue;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -109,8 +109,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document findDocumentById(Long id) {
-        Document document = documentRepository.findById(id)
-                .orElseThrow(() -> new DocumentNotFoundException(id));
+        Document document = documentRepository.findById(id).orElseThrow(() -> new DocumentNotFoundException(id));
 
         return document;
     }
