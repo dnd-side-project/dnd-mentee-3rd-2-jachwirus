@@ -19,9 +19,10 @@ public class DocumentDetailDtoMapper {
                 .map(comment -> CommentDtoMapper.toCommentDto(comment))
                 .collect(Collectors.toList());
         String contributor = Optional
-                .ofNullable(lastVersion.getContributor().getNickname())
-                .orElse("UNKNOWN");
-        
+                .ofNullable(lastVersion.getContributor())
+                .orElse(new User().setNickname("UNKNOWN"))
+                .getNickname();
+
         return new DocumentDetailDto()
                 .setId(document.getId())
                 .setTitle(document.getTitle())
