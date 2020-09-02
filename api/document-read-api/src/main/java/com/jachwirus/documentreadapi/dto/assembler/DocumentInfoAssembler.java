@@ -7,14 +7,13 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class DocumentInfoAssembler implements
         RepresentationModelAssembler<DocumentInfoDto, EntityModel<DocumentInfoDto>> {
+
     @Override
     public EntityModel<DocumentInfoDto> toModel(DocumentInfoDto documentInfoDto) {
         long id = documentInfoDto.getId();

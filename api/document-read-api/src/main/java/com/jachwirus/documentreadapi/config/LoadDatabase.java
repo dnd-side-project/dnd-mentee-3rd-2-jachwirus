@@ -56,7 +56,7 @@ public class LoadDatabase {
             UserRepository userRepository
     ){
         User user = addUser(userRepository);
-        Document document = new Document().setTitle("tmp1").setLikes(1).setDislikes(0).setViewCount(12).setCategory("laundry");
+        Document document = new Document().setTitle("tmp1").setLikes(1).setDislikes(0).setViewCount(12).setCategory("restaurant");
         documentRepository.save(document);
 
         addNewVersion(user, "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);

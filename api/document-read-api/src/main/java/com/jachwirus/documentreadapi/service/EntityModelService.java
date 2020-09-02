@@ -6,8 +6,9 @@ import com.jachwirus.documentreadapi.model.Document;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
-public interface DocumentService {
-    CollectionModel<EntityModel<DocumentInfoDto>> findDocumentsList(String category, String sortTarget, String page);
-    Document findDocumentById(Long id);
-    EntityModel<DocumentDetailDto> getDocumentDetailModel(Document document, String contents);
+import java.util.List;
+
+public interface EntityModelService {
+    CollectionModel<EntityModel<DocumentInfoDto>> toCollectionModel(List<Document> list, String category, String sortTarget, String page);
+    EntityModel<DocumentDetailDto> toEntityModel(Document document, String contents);
 }
