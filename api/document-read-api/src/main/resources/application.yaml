@@ -30,7 +30,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
----
-spring:
-  profiles: production
