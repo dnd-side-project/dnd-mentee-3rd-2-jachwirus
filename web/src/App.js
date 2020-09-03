@@ -1,13 +1,14 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 //import logo from './logo.svg';
-import "./App.css";
+import './App.css';
 
-import HomePage from "./components/HomePage";
-import MenuPage from "./components/MenuPage";
-import WritingPage from "./components/WritingPage";
-import MyPage from "./components/MyPage";
-import Layout from "./components/Layout";
+import HomePage from './components/HomePage';
+import MenuPage from './components/MenuPage';
+import WritingPage from './components/WritingPage/';
+import MyPage from './components/MyPage';
+import Layout from './components/Layout';
+import WritingPost from './components/WritingPost';
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
           </Route>
           <Route exact path="/mypage">
             <MyPage />
+          </Route>
+          <Route exact path="/editor">
+            <WritingPost />
           </Route>
         </Layout>
       </Switch>
