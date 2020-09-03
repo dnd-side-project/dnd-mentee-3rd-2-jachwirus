@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+.InputDiv {
+  border-bottom: solid 1px;
+  border-bottom-color: #e8e8e8;
+  height: 26px;
+  padding-bottom: 3px;
+  margin-bottom: 5px;
+}
+
+.InputTitle {
+  display: inline-block;
+  width: 80px;
+  height: 26px;
+  left: 19px;
+  top: 138px;
+
+  font-family: 'Noto Sans KR', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  color: #9b9b9b;
+}
+
+.InputText {
+  border: none;
+  width: calc(100% - 90px);
+}
