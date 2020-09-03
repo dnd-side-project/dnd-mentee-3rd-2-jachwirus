@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-import "./style.css";
-import IconWithText from "../IconWithText";
+import './style.css';
+import IconWithText from '../IconWithText';
 
 class BottomMenu extends Component {
   render() {
+    const curPath = this.props.curPath;
     const { data } = this.props;
     const list = data.map((elem) => {
       const { id, link, img, txt } = elem;
@@ -16,7 +17,11 @@ class BottomMenu extends Component {
       );
     });
 
-    return <nav className="MenuContainer">{list}</nav>;
+    if (curPath === '/editor') {
+      return null;
+    } else {
+      return <nav className="MenuContainer">{list}</nav>;
+    }
   }
 }
 

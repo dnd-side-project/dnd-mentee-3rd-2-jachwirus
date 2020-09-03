@@ -1,10 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+.Ext-header {
+  padding-top: 62px;
+  margin-bottom: 10px;
+}
+
+.Header-left {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  left: 20px;
+  top: 65px;
+  /* border: 1px solid #000000; */
+}
+
+.Header-right {
+  position: absolute;
+  width: 34px;
+  height: 26px;
+  right: 14px;
+  top: 62px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.Header-bottom {
+  margin-top: 33px;
+  width: 100%;
+  border: solid 3px #f9f9f9;
+}
 
 .App-title {
-  text-align: left;
+  /* position: absolute; */
+  display: inline-block;
+  text-align: center;
   background-color: #ffffff;
+  height: 26px;
+  left: 39;
+  width: 100%;
   /*font-family: "Jua", sans-serif;*/
-  font-size: x-large;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 26px;
+  /* font-size: x-large; */
 }
 
 .Title-text {

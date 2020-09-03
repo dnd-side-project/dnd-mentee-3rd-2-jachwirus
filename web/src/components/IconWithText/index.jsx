@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import "./style.css";
+import './style.css';
 
 const IconWithText = ({ image, text }) => {
   return (
