@@ -4,11 +4,22 @@
     "@commitlint/config-conventional": "^9.1.1",
     "husky": "^4.2.5"
   },
+  "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "prettier"
+    ],
+    "parser": "babel-eslint"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "./script/do-not-commit-on-master.sh",
-      "pre-push" : "./script/do-not-push-into-master.sh"
+      "pre-push": "./script/do-not-push-into-master.sh"
     }
+  },
+  "dependencies": {
+    "@toast-ui/react-editor": "^2.3.1",
+    "react-router-dom": "^5.2.0"
   }
 }
