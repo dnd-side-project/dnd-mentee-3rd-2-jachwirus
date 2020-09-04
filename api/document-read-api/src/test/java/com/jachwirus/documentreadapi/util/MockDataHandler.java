@@ -2,7 +2,12 @@ package com.jachwirus.documentreadapi.util;
 
 import com.jachwirus.documentreadapi.model.*;
 import com.jachwirus.documentreadapi.repository.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MockDataHandler {
     private DocumentRepository documentRepository;
@@ -10,6 +15,7 @@ public class MockDataHandler {
     private DocumentHashTagRepository documentHashTagRepository;
     private HashTagRepository hashTagRepository;
     private CommentRepository commentRepository;
+    private List<Document> mockData;
 
     public MockDataHandler(
             DocumentRepository documentRepository,
@@ -23,11 +29,58 @@ public class MockDataHandler {
         this.documentHashTagRepository = documentHashTagRepository;
         this.hashTagRepository = hashTagRepository;
         this.commentRepository = commentRepository;
-
-        getMockDocumentModel();
+        this.mockData = new ArrayList<>();
+        setMockDocumentModel();
     }
 
-    public Document getMockDocumentModel() {
+    public List<Document> getMockDataFilterBy(String category) {
+        List<Document> list = this.mockData.stream()
+                .filter(data -> data.getCategory() == category)
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    public List<Document> getMockDataSortBy(String sortTarget) {
+        Comparator<Document> comparator = getComparator(sortTarget);
+        List<Document> list = this.mockData.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    public List<Document> getMockDataList() {
+        return this.mockData;
+    }
+
+    public Document getMockData(long id) {
+        Document data = this.mockData.stream()
+                .filter(doc -> doc.getId() == id)
+                .collect(Collectors.toList())
+                .get(0);
+        return data;
+    }
+
+    private Comparator<Document> getComparator(String sortTarget) {
+        if(sortTarget.equals("latest")) {
+            return (o1, o2) -> compareLong(o2.getId(), o1.getId());
+        } else if(sortTarget.equals("popularity")) {
+            return ((o1, o2) -> {
+                if(o2.getViewCount() == o1.getViewCount()) {
+                    return compareLong(o2.getId(), o1.getId());
+                }else {
+                    return o2.getViewCount() - o1.getViewCount();
+                }
+            });
+        } else {
+            return null;
+        }
+    }
+
+    private int compareLong(long a, long b) {
+        return a > b ? 1 : -1;
+    }
+
+    public void setMockDocumentModel() {
         Document document = new Document().setTitle("tmp1").setLikes(1).setDislikes(0).setViewCount(12).setCategory("laundry");
         documentRepository.save(document);
 
@@ -40,8 +93,49 @@ public class MockDataHandler {
         addComments("hihihi", document, documentRepository, commentRepository);
         addComments("byebyebye", document, documentRepository, commentRepository);
 
+        this.mockData.add(document);
 
-        return document;
+        document = new Document().setTitle("tmp2").setLikes(1).setDislikes(0).setViewCount(1).setCategory("cafe");
+        documentRepository.save(document);
+
+        addNewVersion("http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion( "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
+
+        addHashTag("hello", document, documentHashTagRepository, hashTagRepository);
+        addHashTag("world", document, documentHashTagRepository, hashTagRepository);
+
+        addComments("hihihi", document, documentRepository, commentRepository);
+        addComments("byebyebye", document, documentRepository, commentRepository);
+
+        this.mockData.add(document);
+
+        document = new Document().setTitle("tmp3").setLikes(1).setDislikes(0).setViewCount(5).setCategory("cafe");
+        documentRepository.save(document);
+
+        addNewVersion("http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion( "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
+
+        addHashTag("hello", document, documentHashTagRepository, hashTagRepository);
+        addHashTag("world", document, documentHashTagRepository, hashTagRepository);
+
+        addComments("hihihi", document, documentRepository, commentRepository);
+        addComments("byebyebye", document, documentRepository, commentRepository);
+
+        this.mockData.add(document);
+
+        document = new Document().setTitle("tmp4").setLikes(1).setDislikes(0).setViewCount(1).setCategory("cafe");
+        documentRepository.save(document);
+
+        addNewVersion("http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion( "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
+
+        addHashTag("hello", document, documentHashTagRepository, hashTagRepository);
+        addHashTag("world", document, documentHashTagRepository, hashTagRepository);
+
+        addComments("hihihi", document, documentRepository, commentRepository);
+        addComments("byebyebye", document, documentRepository, commentRepository);
+
+        this.mockData.add(document);
     }
 
     private void addComments(
