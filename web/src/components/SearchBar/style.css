@@ -1,22 +1,25 @@
 .Container {
   height: calc(27px + 2vmin);
   display: flex;
-  border: 1.5px solid blueviolet;
-  border-radius: 20px;
+  border: 1.5px solid #37daad;
+  border-radius: 10px;
 }
 
 .Search {
   flex-grow: 1;
-  height: calc(25px + 2vmin);
+  height: calc(23px + 2vmin);
   text-align: center;
   font-size: calc(10px + 2vmin);
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   outline: none;
+  margin-top: 1.5px;
 }
 
 .SearchButton {
   max-height: calc(20px + 2vmin);
   padding: 5px;
   outline: none;
+  -webkit-filter: opacity(0.5) drop-shadow(0 0 0 #37daad);
+  filter: opacity(0.5) drop-shadow(0 0 0 #37daad);
 }

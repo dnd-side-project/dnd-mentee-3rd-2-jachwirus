@@ -6,11 +6,12 @@ import "./style.css";
 const GoodTip = (props) => {
   const data = props.posts;
   const list = data.map((elem) => {
-    const { id, title, tag } = elem;
+    let { id, title, tag } = elem;
     return (
       <li className="Post" key={id}>
         <HashTag tag={tag} />
-        {title}
+        <div className="Title">{title}</div>
+        <img className="Notification" src="/images/good.png" alt="good" />
       </li>
     );
   });

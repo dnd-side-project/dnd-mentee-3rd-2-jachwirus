@@ -1,14 +1,39 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 
+#headerContainer {
+  display: flex;
+  height: 32px;
+  margin: 10px;
+}
+
+#headerNotice {
+  height: 32px;
+  flex-grow: 1;
+}
+
+#headerNoticeIcon {
+  height: 90%;
+  float: right;
+}
+
 .App-title {
-  text-align: left;
-  background-color: #ffffff;
+  background-color: none;
   /*font-family: "Jua", sans-serif;*/
   font-size: x-large;
 }
 
+#logo {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
 .Title-text {
   color: black;
+  font-weight: bold;
   text-decoration: none;
-  margin-left: 10px;
 }

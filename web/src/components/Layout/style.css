@@ -21,8 +21,6 @@
 }
 .App-page {
   flex: 1;
-  margin-left: 10px;
-  margin-right: 10px;
   overflow-x: hidden;
   overflow-y: scroll;
   -ms-overflow-style: none;

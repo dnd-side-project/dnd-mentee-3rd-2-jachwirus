@@ -6,12 +6,19 @@ import "./style.css";
 class Header extends Component {
   render() {
     return (
-      <header>
-        <h1 className="App-title">
+      <header id="headerContainer">
+        <div className="App-title">
           <Link to="/" className="Title-text">
-            {this.props.title}
+            <img id="logo" src="/images/logo.png" alt="logo" />
           </Link>
-        </h1>
+        </div>
+        {/*<div id="headerNotice">
+          <img
+            id="headerNoticeIcon"
+            src="/images/notice.png"
+            alt="headerNoticeIcon"
+          />
+        </div>*/}
       </header>
     );
   }
