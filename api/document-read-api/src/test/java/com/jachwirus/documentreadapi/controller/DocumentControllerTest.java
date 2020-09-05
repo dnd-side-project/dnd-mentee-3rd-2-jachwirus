@@ -57,7 +57,7 @@ public class DocumentControllerTest {
                 .alwaysDo(print())
                 .build();
 
-        mockDataHandler = new MockDataHandler(
+        mockDataHandler = MockDataHandler.getInstance(
                 documentRepository,
                 documentVersionRepository,
                 documentHashTagRepository,
