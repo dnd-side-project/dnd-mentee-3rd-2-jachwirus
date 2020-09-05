@@ -7,7 +7,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import static com.jachwirus.documentreadapi.controller.DocumentController.ENTIRE_LIST;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -16,13 +15,16 @@ public class DocumentDetailAssembler implements
         RepresentationModelAssembler<DocumentDetailDto, EntityModel<DocumentDetailDto>> {
     @Override
     public EntityModel<DocumentDetailDto> toModel(DocumentDetailDto documentDetailDto) {
+        long id = documentDetailDto.getId();
         String category = documentDetailDto.getCategory();
-        String sortTarget = DefaultValue.sortTarget;
+        String defaultCategory = DefaultValue.category;
+        String defaultSortTarget = DefaultValue.sortTarget;
+        String defaultPage = DefaultValue.page;
 
         EntityModel<DocumentDetailDto> model = EntityModel.of(documentDetailDto,
-                linkTo(methodOn(DocumentController.class).findOne(documentDetailDto.getId())).withSelfRel(),
-                linkTo(methodOn(DocumentController.class).findList(category, sortTarget)).withRel("category"),
-                linkTo(methodOn(DocumentController.class).findList(ENTIRE_LIST, sortTarget)).withRel("documents")
+                linkTo(methodOn(DocumentController.class).findOne(id)).withSelfRel(),
+                linkTo(methodOn(DocumentController.class).findList(category, defaultSortTarget, defaultPage)).withRel("category"),
+                linkTo(methodOn(DocumentController.class).findList(defaultCategory, defaultSortTarget, defaultPage)).withRel("documents")
         );
         return model;
     }

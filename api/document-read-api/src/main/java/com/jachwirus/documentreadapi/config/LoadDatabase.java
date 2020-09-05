@@ -1,13 +1,7 @@
 package com.jachwirus.documentreadapi.config;
 
-import com.jachwirus.documentreadapi.model.Document;
-import com.jachwirus.documentreadapi.model.DocumentHashTag;
-import com.jachwirus.documentreadapi.model.DocumentVersion;
-import com.jachwirus.documentreadapi.model.HashTag;
-import com.jachwirus.documentreadapi.repository.DocumentHashTagRepository;
-import com.jachwirus.documentreadapi.repository.DocumentRepository;
-import com.jachwirus.documentreadapi.repository.DocumentVersionRepository;
-import com.jachwirus.documentreadapi.repository.HashTagRepository;
+import com.jachwirus.documentreadapi.model.*;
+import com.jachwirus.documentreadapi.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +25,9 @@ public class LoadDatabase {
             DocumentRepository documentRepository,
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
-            HashTagRepository hashTagRepository
+            HashTagRepository hashTagRepository,
+            CommentRepository commentRepository,
+            UserRepository userRepository
     ) {
         final String env = environment.getActiveProfiles()[0];
         switch (env){
@@ -41,7 +37,9 @@ public class LoadDatabase {
                             documentRepository,
                             documentVersionRepository,
                             documentHashTagRepository,
-                            hashTagRepository
+                            hashTagRepository,
+                            commentRepository,
+                            userRepository
                     );
                 };
             default:
@@ -53,76 +51,54 @@ public class LoadDatabase {
             DocumentRepository documentRepository,
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
-            HashTagRepository hashTagRepository
+            HashTagRepository hashTagRepository,
+            CommentRepository commentRepository,
+            UserRepository userRepository
     ){
-        String title, category;
-        int like, dislike, view_count;
-
-        String dataUrl, thumbnailUrl, diff;
-        long contributorId;
-        int flag;
-        Date createdAt;
-
-        title = "tmp1";
-        like=1;
-        dislike=0;
-        view_count = 12;
-        category="laundry";
-
-        Document document = new Document()
-                .setTitle(title).setLikes(like).setDislikes(dislike)
-                .setViewCount(view_count).setCategory(category);
+        User user = addUser(userRepository);
+        Document document = new Document().setTitle("tmp1").setLikes(1).setDislikes(0).setViewCount(12).setCategory("restaurant");
         documentRepository.save(document);
 
-        contributorId = 1;
-        dataUrl="tmp1.com"; ;
-        thumbnailUrl="tmp1Thumnail.com";
-        flag = 123;
-        createdAt = new Date();
-        diff = null;
+        addNewVersion(user, "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.md", "tmp1Thumnail.com", 123, new Date(), null, document, documentRepository, documentVersionRepository);
+        addNewVersion( user, "http://qofmpxmytmrj4990290.cdn.ntruss.com/tmp.html", "tmp2Thumnail.com", 12345, new Date(), null, document, documentRepository, documentVersionRepository);
 
-        addNewVersion(
-                contributorId,
-                dataUrl,
-                thumbnailUrl,
-                flag,
-                createdAt,
-                diff,
-                document,
-                documentRepository,
-                documentVersionRepository
-        );
+        addHashTag("hello", document, documentHashTagRepository, hashTagRepository);
+        addHashTag("world", document, documentHashTagRepository, hashTagRepository);
 
-        contributorId = 2;
-        dataUrl="tmp2.com"; ;
-        thumbnailUrl="tmp2Thumnail.com";
-        flag = 12345;
-        createdAt = new Date();
-        diff = null;
+        addComments(user, "hihihi", document, documentRepository, commentRepository);
+        addComments(user, "byebyebye", document, documentRepository, commentRepository);
 
-        addNewVersion(
-                contributorId,
-                dataUrl,
-                thumbnailUrl,
-                flag,
-                createdAt,
-                diff,
-                document,
-                documentRepository,
-                documentVersionRepository
-        );
+        documentRepository.findAll().forEach(doc -> log.info("Preloaded" + doc));
+    }
 
-        String tagName = "hello";
-        addHashTag(tagName, document, documentHashTagRepository, hashTagRepository);
+    private User addUser(UserRepository userRepository) {
+        User user = new User()
+                .setUserId("hello")
+                .setPassword("world")
+                .setNickname("Johnie");
+        userRepository.save(user);
+        return user;
+    }
 
-        String tagName2 = "world";
-        addHashTag(tagName2, document, documentHashTagRepository, hashTagRepository);
-
-        documentRepository.findAllWithLatestVersion().forEach(doc -> log.info("Preloaded" + doc));
+    private void addComments(
+            User user,
+            String contents,
+            Document document,
+            DocumentRepository documentRepository,
+            CommentRepository commentRepository
+    ) {
+        Comment comment = new Comment()
+                .setContents(contents)
+                .setCreatedAt(new Date())
+                .setModified(false);
+        user.writeComment(comment);
+        document.addComment(comment);
+        commentRepository.save(comment);
+        documentRepository.save(document);
     }
 
     private void addNewVersion(
-            long contributorId,
+            User user,
             String dataUrl,
             String thumbnailUrl,
             int flag,
@@ -138,6 +114,7 @@ public class LoadDatabase {
                 .setFlag(flag)
                 .setCreatedAt(createdAt)
                 .setDiff(diff);
+        user.contributeDocument(version);
         document.addNewVersion(version);
         documentVersionRepository.save(version);
         documentRepository.save(document);
@@ -149,12 +126,18 @@ public class LoadDatabase {
             DocumentHashTagRepository documentHashTagRepository,
             HashTagRepository hashTagRepository
     ) {
-        HashTag tag = new HashTag().setTagName(tagName);
+        HashTag tag = getHashTag(hashTagRepository, tagName);
         DocumentHashTag mapping = new DocumentHashTag();
 
         document.addHashTag(mapping, tag);
         hashTagRepository.save(tag);
         documentHashTagRepository.save(mapping);
+    }
+
+    private HashTag getHashTag(HashTagRepository repository, String tagName) {
+        HashTag tag = repository.findByTagName(tagName)
+                .orElse(new HashTag().setTagName(tagName));
+        return tag;
     }
 
 }

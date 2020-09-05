@@ -45,6 +45,9 @@ public class Document {
         this.tags.add(mapping);
         tag.getDocuments().add(mapping);
     }
-}
 
-// SELECT * FROM Document inner join
+    public void addComment(Comment comment) {
+        comment.setDocument(this);
+        comments.add(comment);
+    }
+}

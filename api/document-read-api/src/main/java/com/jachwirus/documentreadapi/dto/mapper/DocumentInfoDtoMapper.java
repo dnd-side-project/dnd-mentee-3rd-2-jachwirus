@@ -17,7 +17,6 @@ public class DocumentInfoDtoMapper {
                 .setId(document.getId())
                 .setTitle(document.getTitle())
                 .setThumbnailURL(lastVersion.getThumbnailUrl())
-                .setDataURL(lastVersion.getDataUrl())
                 .setLikes(document.getLikes())
                 .setDislikes(document.getDislikes())
                 .setViewCount(document.getViewCount())
