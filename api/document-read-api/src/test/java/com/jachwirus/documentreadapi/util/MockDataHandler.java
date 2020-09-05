@@ -17,7 +17,7 @@ public class MockDataHandler {
     private CommentRepository commentRepository;
     private List<Document> mockData;
 
-    public MockDataHandler(
+    private MockDataHandler(
             DocumentRepository documentRepository,
             DocumentVersionRepository documentVersionRepository,
             DocumentHashTagRepository documentHashTagRepository,
@@ -31,6 +31,27 @@ public class MockDataHandler {
         this.commentRepository = commentRepository;
         this.mockData = new ArrayList<>();
         setMockDocumentModel();
+    }
+
+    public static MockDataHandler instance;
+
+    public static MockDataHandler getInstance(
+            DocumentRepository documentRepository,
+            DocumentVersionRepository documentVersionRepository,
+            DocumentHashTagRepository documentHashTagRepository,
+            HashTagRepository hashTagRepository,
+            CommentRepository commentRepository
+    ){
+        if(instance == null) {
+            instance = new MockDataHandler(
+                    documentRepository,
+                    documentVersionRepository,
+                    documentHashTagRepository,
+                    hashTagRepository,
+                    commentRepository
+            );
+        }
+        return instance;
     }
 
     public List<Document> getMockDataFilterBy(String category) {
