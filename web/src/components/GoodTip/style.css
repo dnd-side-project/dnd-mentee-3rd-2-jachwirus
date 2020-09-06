@@ -1,0 +1,27 @@
+.GoodTip {
+  width: auto;
+  margin-bottom: 15px;
+}
+
+.List {
+  list-style: none;
+}
+
+.Post {
+  display: flex;
+  margin: 8px;
+}
+
+.Title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 20px;
+  flex-grow: 1;
+}
+
+.Notification {
+  width: fit-content;
+  height: fit-content;
+  margin: 4px;
+}

@@ -1,0 +1,18 @@
+.MenuContainer {
+  display: flex;
+  border-top: 1px solid #e2e2e2;
+}
+
+.Menu {
+  flex-grow: 1;
+  font-size: calc(10px + 2vmin);
+  padding-top: 4px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+
+.Image {
+  max-height: calc(15px + 2vmin);
+  flex-grow: 1;
+}

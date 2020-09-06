@@ -1,0 +1,23 @@
+.homeImage {
+  object-fit: cover;
+  margin-bottom: -50px;
+}
+
+#mainHome {
+  padding: 15px;
+  border-radius: 20px;
+  background-color: white;
+}
+
+.HomePage {
+  background-color: #f4f4e3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Line {
+  width: 100%;
+  height: 1;
+  border: 0.1px solid #e5e5e5;
+}
