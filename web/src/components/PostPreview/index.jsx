@@ -2,20 +2,16 @@ import React from "react";
 
 import "./style.css";
 
-const PostPreview = ({ title /*, description*/ }) => {
-  const userName = "밀면애호가";
-  const userInfo = "자취마스터";
+const PostPreview = ({ title, thumbnailURL, likes }) => {
   return (
     <div>
       <button className="postPreview">
         <div className="profile">
           <img
             className="profileImageInPost"
-            src="/images/profileImage.png"
+            src={thumbnailURL}
             alt="profileImage"
           />
-          <div id="userName">{userName}</div>
-          <div id="userInfo">{userInfo}</div>
         </div>
         <div id="postTitle">{title}</div>
         {/*{description}*/}

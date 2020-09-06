@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 
-import PostPreview from "../PostPreview";
 import "./style.css";
+import PostPreview from "../PostPreview";
 import IconWithText from "../IconWithText";
 import CreatePostButton from "../CreatePostButton";
+import useFetch from "../../hooks/useFetch";
+import { readApi } from "../../assets/uri";
 
 const InCategory = ({ match }) => {
-  const name = "다운타운베이비";
+  const [name, setName] = useState("다운타운베이비");
+  const [data, setData] = useState([]);
+
+  const { key } = match.params;
+
+  const api = `${readApi}/documents`;
+  const option = {
+    params: {
+      category: "laundry",
+    },
+  };
+  const callback = (data) => {
+    setData(data.content);
+  };
+  const loading = useFetch({ api, option, callback });
+
+  console.log("RENDERING!!!", loading);
+
   const keyData = {
     cleaning: {
       title: "청소",
-      description: "",
     },
     bathroom: {
       title: "화장실",
@@ -30,32 +48,24 @@ const InCategory = ({ match }) => {
     pet: {
       title: "애완견",
     },
-    question: {
-      title: "???",
-    },
   };
 
-  const { key } = match.params;
-
-  const postData = [
-    {
-      id: 1,
-      title: "청소랑 나랑 거리멀다 싶은 사람 다 모여라..",
-    },
-    { id: 2, title: "집에서 양말 신기만 하면 양말 색변하는 사람" },
-    {
-      id: 3,
-      title: "손 안닫는 곳까지 깨끗하게 청소하는 법",
-    },
-    { id: 4, title: "청소 한 번으로 데이트 성공하기" },
-    { id: 5, title: "부모님 자취 방 1시간 전 티나게 청소하자" },
-    { id: 6, title: "화상 회의 때 집 깨끗하게 보이는 방법 공유함" },
-  ];
-
-  const postPreviewList = postData.map((elem) => {
-    const { id, title, description } = elem;
-    return <PostPreview key={id} title={title} description={description} />;
-  });
+  const getPreviewList = () => {
+    if (loading) {
+      return "loading....";
+    } else if (loading === false) {
+      return data.map(({ id, title, thumbnailURL, likes }) => (
+        <PostPreview
+          key={id}
+          title={title}
+          thumbnailURL={thumbnailURL}
+          likes={likes}
+        />
+      ));
+    } else {
+      //undefined
+    }
+  };
 
   return (
     <div>
@@ -79,7 +89,7 @@ const InCategory = ({ match }) => {
             width="100"
           />
         </div>
-        <div className="gridContainer">{postPreviewList}</div>
+        <div className="gridContainer">{getPreviewList()}</div>
       </div>
     </div>
   );

@@ -30,6 +30,7 @@ const Layout = ({ children }) => {
       },
     ],
   };
+
   return (
     <div className="Layout">
       <div className="App-page">{children}</div>

@@ -49,14 +49,11 @@ function HomePage() {
       ],
     },
   };
+
   return (
     <header className="HomePage">
       <Header className="App-header" />
-      <img
-        className="homeImage"
-        src="/images/illustration.png"
-        alt="homeImage"
-      />
+      <img className="homeImage" src="/images/illustration.png" alt="배경" />
 
       <div id="mainHome">
         <SearchBar />
