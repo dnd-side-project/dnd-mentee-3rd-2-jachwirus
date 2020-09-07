@@ -1,9 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
 
+.Ext-header {
+  padding-top: 62px;
+  margin-bottom: 10px;
+}
+
+.Header-title {
+  display: inline-block;
+  text-align: center;
+  background-color: #ffffff;
+  height: 26px;
+  left: 39;
+  width: 100%;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.Header-left {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  left: 20px;
+  top: 65px;
+  /* border: 1px solid #000000; */
+}
+
+.Header-right {
+  position: absolute;
+  width: 34px;
+  height: 26px;
+  right: 20px;
+  top: 62px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.Header-bottom {
+  margin-top: 33px;
+  width: 100%;
+  border: solid 3px #f9f9f9;
+}
+
 .InputDiv {
   border-bottom: solid 1px;
   border-bottom-color: #e8e8e8;
   height: 26px;
+  padding-left: 19px;
   padding-bottom: 3px;
   margin-bottom: 5px;
 }
