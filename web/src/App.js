@@ -5,9 +5,10 @@ import './App.css';
 
 import HomePage from './components/HomePage';
 import MenuPage from './components/MenuPage';
-import WritingPage from './components/WritingPage/';
+import MapView from './components/MapView';
 import MyPage from './components/MyPage';
 import Layout from './components/Layout';
+import InCategory from './components/InCategory';
 import WritingPost from './components/WritingPost';
 
 function App() {
@@ -15,21 +16,12 @@ function App() {
     <Router className="App">
       <Switch>
         <Layout>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route exact path="/menu">
-            <MenuPage />
-          </Route>
-          <Route exact path="/writing">
-            <WritingPage />
-          </Route>
-          <Route exact path="/mypage">
-            <MyPage />
-          </Route>
-          <Route exact path="/editor">
-            <WritingPost />
-          </Route>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/menu" component={MenuPage} />
+          <Route path="/mapView" component={MapView} />
+          <Route path="/mypage" component={MyPage} />
+          <Route path="/category/:key" component={InCategory} />
+          <Route path="/writing" component={WritingPost} />
         </Layout>
       </Switch>
     </Router>
