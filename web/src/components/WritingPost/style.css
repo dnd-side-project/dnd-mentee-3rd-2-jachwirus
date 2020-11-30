@@ -6,6 +6,7 @@
 }
 
 .Header-title {
+  position: fixed;
   display: inline-block;
   text-align: center;
   background-color: #ffffff;
@@ -74,4 +75,30 @@
 .InputText {
   border: none;
   width: calc(100% - 90px);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.DivTag {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.ChipsTag {
+  background-color: #39e5b6;
+  border-radius: 5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  color: #ffffff;
+  text-align: center;
+  padding: 2px 5px;
+  margin: 2px 3px;
+}
+
+.BtnDelete {
+  vertical-align: middle;
+}
+
+.IconDelete {
+  size: 10px;
 }
